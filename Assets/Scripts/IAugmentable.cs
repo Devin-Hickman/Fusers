@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using Fusers;
 using UnityEngine;
 
-public class StandardEnemy : AbstractEnemy {
+public interface IAugmentable
+{
 
+    void AddAugmentation(Augment augment);
+    
 
 }

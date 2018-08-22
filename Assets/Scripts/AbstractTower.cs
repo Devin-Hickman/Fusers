@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusers;
 
-public abstract class AbstractTower : MonoBehaviour {
+public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
 
     [SerializeField] protected float attackRadius;
     [SerializeField] protected float attackDamage;
@@ -10,6 +11,7 @@ public abstract class AbstractTower : MonoBehaviour {
     private float lastAttackTime;
     private float attackCooldown; // = 1/attacksPerSecond
     private bool hasAttacked = false;
+    protected ElementType attackDamageType;
     
 
     [SerializeField] protected int costToPurchase;
@@ -18,25 +20,24 @@ public abstract class AbstractTower : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         attackCooldown = 1 / attacksPerSecond;
-		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        Collider2D[] enemiesInRange = findEnemiesInAttackRadius();
+        Collider2D[] enemiesInRange = FindEnemiesInAttackRadius();
         if(enemiesInRange.Length > 0)
         {
             AbstractEnemy enemy = enemiesInRange[0].gameObject.GetComponent<AbstractEnemy>();
-            attackEnemy(enemy);
+            DoAttack(enemy);
         }   
 	}
 
-    protected virtual void attackEnemy(AbstractEnemy enemy)
+    protected virtual void DoAttack(AbstractEnemy enemy)
     {
         if (!hasAttacked)
         {
             lastAttackTime = Time.time;
-            enemy.OnAttacked(attackDamage);
+            enemy.OnAttacked(CalculateTowerAttackDamage(), attackDamageType);
             hasAttacked = true;
         }
         else if(Time.time > lastAttackTime + attackCooldown)
@@ -46,11 +47,14 @@ public abstract class AbstractTower : MonoBehaviour {
         }
     }
 
-    protected Collider2D[] findEnemiesInAttackRadius()
+    protected Collider2D[] FindEnemiesInAttackRadius()
     {
         int layerMask = 1 << LayerMask.NameToLayer("Enemy");
         return Physics2D.OverlapCircleAll(transform.position, attackRadius, layerMask);
     }
 
 
+    public abstract void AddAugmentation(Augment augment);
+
+    protected abstract float CalculateTowerAttackDamage();
 }

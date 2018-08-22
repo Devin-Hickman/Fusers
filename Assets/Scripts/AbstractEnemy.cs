@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusers;
 
 public abstract class AbstractEnemy : MonoBehaviour {
     
@@ -24,7 +25,7 @@ public abstract class AbstractEnemy : MonoBehaviour {
         Debug.Log(currentDestinationPoint.name);
         rb2d = GetComponent<Rigidbody2D>();
 
-        onRoundStart();
+        OnRoundStart();
 	}
 	
 	// Update is called once per frame
@@ -38,28 +39,28 @@ public abstract class AbstractEnemy : MonoBehaviour {
         rb2d.velocity = targetDirection * moveSpeed;
     }
 
-    private void onRoundStart()
+    private void OnRoundStart()
     {
-        updateDestinationPoint();
+        UpdateDestinationPoint();
     }
 
-    public virtual void OnAttacked(float incomingDamage)
+    public virtual void OnAttacked(float incomingDamage, ElementType attackType)
     {
         Debug.Log("Under attack");
         health -= incomingDamage;
         if(health < 0)
         {
-            onDeath();
+            OnDeath();
         }
     }
 
-    private void reachedEnd()
+    private void ReachedEnd()
     {
         //Deal 1 damage to player
         Destroy(this);
     }
 
-    private void updateDestinationPoint()
+    private void UpdateDestinationPoint()
     {
         currentDestinationPointIndex++;
         currentDestinationPoint = pathPoints[currentDestinationPointIndex];
@@ -67,7 +68,7 @@ public abstract class AbstractEnemy : MonoBehaviour {
         
     }
 
-    private void onDeath()
+    private void OnDeath()
     {
         Debug.Log("ENEMY SLAIN");
     }
@@ -82,7 +83,7 @@ public abstract class AbstractEnemy : MonoBehaviour {
         if (other.tag == "pathPoint")
         {
 
-            updateDestinationPoint();
+            UpdateDestinationPoint();
         }
 
         if (other.tag == "pathEnd")
@@ -90,7 +91,7 @@ public abstract class AbstractEnemy : MonoBehaviour {
             Debug.Log("PLAYER DAMAGE TAKEN -1HP");
             transform.position = startPosition;
             currentDestinationPointIndex = 0;
-            updateDestinationPoint();
+            UpdateDestinationPoint();
             //reachedEnd();
         }
     }
