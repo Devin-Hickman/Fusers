@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusers;
 
-public abstract class Augment : ScriptableObject {
+public class ShopItems : MonoBehaviour {
+
+    public ElementAugment[] elementAugmentsForSale;
 
 
 }

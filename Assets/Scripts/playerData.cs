@@ -2,35 +2,71 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Fusers;
+using System;
 
 public class playerData {
-    private readonly int maxCores = 999999;
-    private Dictionary<ElementType, int> playerCores;
+    private static readonly int maxCores = 999999;
+   // private List<Core> playerCores = new List<Core>();
+    private Dictionary<ElementType, int> playerCores = new Dictionary<ElementType, int>();
 
-    private void InitiliazePlayerCores()
+    public playerData()
     {
-        foreach (ElementType val in System.Enum.GetValues(typeof(ElementType)))
-        {
-            playerCores.Add(val, 0);
-        }
+        playerCores.Add(ElementType.AIR, 0);      //0
+        playerCores.Add(ElementType.EARTH, 0);    //1
+        playerCores.Add(ElementType.FIRE, 0);     //2
+        playerCores.Add(ElementType.WATER, 0);    //3
+        playerCores.Add(ElementType.NORMAL, 0);   //4
     }
 
-    public void AddCores(ElementType core, int count)
-    {   
-        if(playerCores[core] + count > maxCores)
+    public int GetAirCoresCount()
+    {
+        return playerCores[ElementType.AIR];
+    }
+
+    public int GetEarthCoresCount()
+    {
+        return playerCores[ElementType.EARTH];
+    }
+
+    public int GetFireCoresCount()
+    {
+        return playerCores[ElementType.FIRE];
+    }
+
+    public int GetWaterCoresCount()
+    {
+        return playerCores[ElementType.WATER];
+    }
+
+    public int GetNormalCoresCount()
+    {
+        return playerCores[ElementType.NORMAL];
+    }
+
+    public void AddCores(Core core)
+    {
+        ElementType eleType = core.CoreType;
+        //Incrases the count of the core in the player list. Cannot be below 0 or exceed maxCoreCount
+        if (playerCores.ContainsKey(eleType))
         {
-            playerCores[core] = maxCores;
+            if(playerCores[eleType] + core.Count > maxCores)
+            {
+                playerCores[eleType] = maxCores;
+            } else if (playerCores[eleType] + core.Count < 0)
+            {
+                playerCores[eleType] = 0;
+            }
+            else
+            {
+                playerCores[eleType] += core.Count;
+            }
+
         }
-        else if (playerCores[core] + count < 0)
-        {
-            playerCores[core] = 0;
-        }
+        //Adds the core to list, should not occur
         else
         {
-            playerCores[core] += count;
+            Debug.Log("ADDED UNKNOWN CORE TO LIST");
+            playerCores.Add(core.CoreType, core.Count);
         }
-
-
-
     }
 }

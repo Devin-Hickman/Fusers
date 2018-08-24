@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusers;
 
 namespace Fusers
 {
@@ -14,6 +15,8 @@ namespace Fusers
     }
 }
 
+
 public class NameSpace : MonoBehaviour {
+
 
 }

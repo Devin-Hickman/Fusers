@@ -5,21 +5,29 @@ using UnityEngine;
 
 public class ArrowTower : AbstractTower {
 
+
     [SerializeField]
-    private ElementAugment elementalAugment = null;
+    private ElementAugment elementalAugment;
 
     public override void AddAugmentation(Augment augment)
     {
         if(augment is ElementAugment)
         {
             elementalAugment = (ElementAugment)augment;
-            attackDamageType = elementalAugment.GetElementType();
+            attackDamageType = elementalAugment.elementType;
+            Debug.Log("Added "  + elementalAugment.elementType + " augment to the tower");
         }
     }
 
     protected override float CalculateTowerAttackDamage()
     {
-        return attackDamage;
+        if (elementalAugment != null)
+        {
+            return attackDamage + elementalAugment.bonusDmg;
+        }
+        else
+            return attackDamage;
+
     }
 
     void OnDrawGizmos()

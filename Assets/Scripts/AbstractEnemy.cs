@@ -1,13 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Fusers;
+using System;
 
 public abstract class AbstractEnemy : MonoBehaviour {
+
+    [Serializable]
+    public class EnemyDeathEvent : UnityEvent<Core> { };
+    public EnemyDeathEvent onDeathEvent;
     
     [SerializeField] protected float health;
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected int damage;
+
+    [SerializeField] protected ElementType armorType;
+    [SerializeField] protected int armor;
+
+    Core[] cores = new Core[] { new Core(ElementType.AIR), new Core(ElementType.EARTH), new Core(ElementType.FIRE), new Core(ElementType.WATER), new Core(ElementType.NORMAL) };
 
     Transform[] pathPoints;
     Transform currentDestinationPoint;
@@ -18,13 +29,12 @@ public abstract class AbstractEnemy : MonoBehaviour {
     private Vector3 targetDirection;
 
 	// Use this for initialization
-	void Start () {
+	 void Start () {
         startPosition = this.transform.position;
         pathPoints = GameObject.Find("Enemy Path").GetComponentsInChildren<Transform>();
         currentDestinationPoint = pathPoints[currentDestinationPointIndex];
         Debug.Log(currentDestinationPoint.name);
         rb2d = GetComponent<Rigidbody2D>();
-
         OnRoundStart();
 	}
 	
@@ -71,18 +81,22 @@ public abstract class AbstractEnemy : MonoBehaviour {
     private void OnDeath()
     {
         Debug.Log("ENEMY SLAIN");
+        Core itemDropped = itemsDroppedOnDeath();
+        onDeathEvent.Invoke(itemDropped);
+        Destroy(this.gameObject);
     }
 
-    protected virtual void dropItemsOnDeath()
+    protected virtual Core itemsDroppedOnDeath()
     {
-
+        Core c = cores[UnityEngine.Random.Range(0, cores.Length)];
+        c.Count = UnityEngine.Random.Range(0, 3);
+        return c;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "pathPoint")
         {
-
             UpdateDestinationPoint();
         }
 
@@ -95,4 +109,5 @@ public abstract class AbstractEnemy : MonoBehaviour {
             //reachedEnd();
         }
     }
+
 }
