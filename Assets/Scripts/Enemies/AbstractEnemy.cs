@@ -33,10 +33,11 @@ public abstract class AbstractEnemy : MonoBehaviour {
         startPosition = this.transform.position;
         pathPoints = GameObject.Find("Enemy Path").GetComponentsInChildren<Transform>();
         currentDestinationPoint = pathPoints[currentDestinationPointIndex];
-        Debug.Log(currentDestinationPoint.name);
         rb2d = GetComponent<Rigidbody2D>();
         OnRoundStart();
-	}
+
+        onDeathEvent.AddListener(PlayerController.addCorestoInventory);
+    }
 	
 	// Update is called once per frame
 	void Update () {

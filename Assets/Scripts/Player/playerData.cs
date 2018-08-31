@@ -7,7 +7,7 @@ using System;
 public class playerData {
     private static readonly int maxCores = 999999;
    // private List<Core> playerCores = new List<Core>();
-    private Dictionary<ElementType, int> playerCores = new Dictionary<ElementType, int>();
+    private static Dictionary<ElementType, int> playerCores = new Dictionary<ElementType, int>();
 
     public playerData()
     {
@@ -18,32 +18,32 @@ public class playerData {
         playerCores.Add(ElementType.NORMAL, 0);   //4
     }
 
-    public int GetAirCoresCount()
+    public static int GetAirCoresCount()
     {
         return playerCores[ElementType.AIR];
     }
 
-    public int GetEarthCoresCount()
+    public static int GetEarthCoresCount()
     {
         return playerCores[ElementType.EARTH];
     }
 
-    public int GetFireCoresCount()
+    public static int GetFireCoresCount()
     {
         return playerCores[ElementType.FIRE];
     }
 
-    public int GetWaterCoresCount()
+    public static int GetWaterCoresCount()
     {
         return playerCores[ElementType.WATER];
     }
 
-    public int GetNormalCoresCount()
+    public static int GetNormalCoresCount()
     {
         return playerCores[ElementType.NORMAL];
     }
 
-    public void AddCores(Core core)
+    public static  void AddCores(Core core)
     {
         ElementType eleType = core.CoreType;
         //Incrases the count of the core in the player list. Cannot be below 0 or exceed maxCoreCount

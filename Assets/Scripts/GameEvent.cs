@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Fusers;
 
-public class EventManager : MonoBehaviour {
+public class GameEvent :  UnityEvent {
 
 
 

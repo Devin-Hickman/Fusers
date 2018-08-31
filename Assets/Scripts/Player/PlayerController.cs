@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
         if (Input.GetMouseButtonDown(0))
         {
             GameObject clickedtarget = GameObjctClickedOn();
@@ -35,7 +36,7 @@ public class PlayerController : MonoBehaviour {
                 if (clickedtarget.GetComponent<AbstractTower>() != null)
                 {
                     lastClickedTower = clickedtarget.GetComponent<AbstractTower>();
-                    Debug.Log(lastClickedTower.name);
+                    lastClickedTower.SwapSprite();
                 }
 
                 if (clickedtarget.GetComponent<AbstractEnemy>() != null)
@@ -45,11 +46,11 @@ public class PlayerController : MonoBehaviour {
                     Debug.Log(lastClickedEnemy.name);
                 }
             }
-
         }
 
         purchaseAugment();
-	}
+        updateCoreCountDisplay();
+    }
 
     private void purchaseAugment()
     {
@@ -87,20 +88,18 @@ public class PlayerController : MonoBehaviour {
     }
 
     //Event callbacks. Called on enemyDeath
-    public void addCorestoInventory(Core core)
+    public static void addCorestoInventory(Core core)
     {
         playerData.AddCores(core);
-        Debug.Log("Added a core!");
-        updateCoreCountDisplay();
+        Debug.Log("Added " + core.Count + " " + core.CoreType + " to inventory");
     }
 
-    public void addCoresToInvetory(List<Core> coreList)
+    public static void addCoresToInvetory(List<Core> coreList)
     {
         foreach (Core c in coreList)
         {
             playerData.AddCores(c);
         }
-        updateCoreCountDisplay();
     }
 
     private void updateCoreCountDisplay()
