@@ -17,9 +17,10 @@ public class TowerBuilder : MonoBehaviour {
 	void Update () {
         if (buildMode)
         {
-            Vector3 newPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            newPos.z = 0;
-            towerToBuild.transform.position = newPos;
+            //Get mouse position, and have tower follow mouse position
+            // Vector3 newPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            // newPos.z = 0;
+            towerToBuild.transform.position = InputManager.GetInputPosition();
             towerToBuild.GetComponent<AbstractTower>().ShowRangeIndicator();
 
             if (Input.GetMouseButtonDown(0))

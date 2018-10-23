@@ -28,6 +28,8 @@ public abstract class AbstractEnemy : MonoBehaviour {
     Rigidbody2D rb2d;
     private Vector3 targetDirection;
 
+    private List<StatusEffect> statusEffects = new List<StatusEffect>();
+
 	// Use this for initialization
 	 void Start () {
         startPosition = this.transform.position;
@@ -43,6 +45,21 @@ public abstract class AbstractEnemy : MonoBehaviour {
 	void Update () {
 
         Move();
+        
+    }
+
+    private void DoStatusEffects()
+    {
+        foreach(StatusEffect s in statusEffects)
+        {
+            s.DoStatusEffect(this);
+        }
+    }
+
+
+    public void AddStatusEffect(StatusEffect effect)
+    {
+        statusEffects.Add(effect);
     }
 
     private void Move()

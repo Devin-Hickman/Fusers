@@ -17,6 +17,7 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
 
     [SerializeField] protected int costToPurchase;
     [SerializeField] protected int costToUpgrade;
+    protected Sprite sprite;
 
 	// Use this for initialization
 	void Start () {
@@ -67,6 +68,10 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
 
     protected Collider2D[] FindEnemiesInAttackRadius()
     {
+        //Uses a layermask to filter colliders for enemy units only. Enemies must be on Enemy layer or else they will not be found
+        //Can use this to add in camoflauge units. If the tower does not have a camoflague sensor, it will ignore that layer, but if
+        // it does have that sensor it will use the layer
+        //TODO: Add camoflauge trigger
         int layerMask = 1 << LayerMask.NameToLayer("Enemy");
         return Physics2D.OverlapCircleAll(transform.position, attackRadius, layerMask);
     }
