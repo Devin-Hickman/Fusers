@@ -6,7 +6,7 @@ using System.Text;
 class AirSkillTree : SkillTree
 {
 
-    public override Attack ApplyAttackModifiers(Attack attack)
+    public override AbstractAttack ApplyAttackModifiers(AbstractAttack attack)
     {
         throw new NotImplementedException();
     }

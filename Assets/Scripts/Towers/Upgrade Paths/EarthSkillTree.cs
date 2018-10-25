@@ -5,7 +5,7 @@ using System.Text;
 
 class EarthSkillTree : SkillTree
 {
-    public override Attack ApplyAttackModifiers(Attack attack)
+    public override AbstractAttack ApplyAttackModifiers(AbstractAttack attack)
     {
         throw new NotImplementedException();
     }

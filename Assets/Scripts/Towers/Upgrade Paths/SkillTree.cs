@@ -19,7 +19,7 @@ abstract class SkillTree
 
     Sprite sprite;
 
-    public abstract Attack ApplyAttackModifiers(Attack attack);
+    public abstract IAttack ModifyAttack(IAttack attack);
     public abstract void ApplyTowerModifiers(BaseElementalTower tower);
 
     public int ResetSkill(String skillName)

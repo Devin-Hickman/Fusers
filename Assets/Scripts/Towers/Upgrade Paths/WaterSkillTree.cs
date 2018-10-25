@@ -6,7 +6,7 @@ using System.Text;
 class WaterSkillTree : SkillTree
 {
 
-    protected override Attack ApplyAttackModifiers(Attack attack)
+    protected override AbstractAttack ApplyAttackModifiers(AbstractAttack attack)
     {
         throw new NotImplementedException();
     }

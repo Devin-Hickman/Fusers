@@ -14,6 +14,8 @@ class BaseElementalTower : AbstractTower
     int upgradePaths_Count = 0;
     int upgradePaths_Cap = 2;
 
+    List<SkillTree> skillTrees = new List<SkillTree>();
+
     public void Awake()
     {
 
@@ -33,6 +35,7 @@ class BaseElementalTower : AbstractTower
     {
         if (upgradePaths_Count < upgradePaths_Cap)
         {
+            skillTrees.Add(skillTree);
             this.AddComponent<skillTree>();
             skillTree.ApplyTowerModifiers(this);
             ApplyNewSprite(skillTree.GetSprite());
@@ -40,6 +43,15 @@ class BaseElementalTower : AbstractTower
         else
         {
             Debug.Log("Unable to add an additional upgrade path to this tower");
+        }
+    }
+
+    protected override IAttack ConstructAttack()
+    {
+        IAttack attack = new Attack();
+        foreach (SkillTree s in skillTrees)
+        {
+            s.ModifyAttack(attack, this);
         }
     }
 

@@ -71,20 +71,15 @@ class FireSkillTree : SkillTree
         return (float)(skills["Attack Speed Buff"].GetCurrentLevel() * 5);
     }
 
-    public override Attack ApplyAttackModifiers(Attack attack)
+    private SplashAttack CreateSplashAttack()
     {
-        if(skills["Splash Damage"].GetCurrentLevel() > 0)
-        {
-            attack.AddSplashEffect(splashRadius * skills["Splash Damage"].GetCurrentLevel());
-        }
+        float splashAttackDamage = skills["Splash Damage"].GetCurrentLevel() * 50;
+        float splashAttackRadius = skills["Splash Damage"].GetCurrentLevel() * 2;
 
-        if(skills["Ignition"].GetCurrentLevel() > 0)
-        {
-            spreadingFlameActive = skills["Spreading Flame"].GetCurrentLevel() > 0;
-            Ignite spreadingFlame = new Ignite(igniteDamage, igniteDuration, spreadingFlameActive);
-            attack.AddStatusEffect(spreadingFlame);
-        }
-        return attack;
+        SplashAttack s = new SplashAttack(splashAttackDamage, splashAttackRadius);
+        s.AddStatusEffect(new Ignite(igniteDamage, igniteDuration));
+
+        return new SplashAttack(splashAttackDamage, splashAttackRadius);
     }
 
     public override void ApplyTowerModifiers(BaseElementalTower tower)
@@ -92,6 +87,23 @@ class FireSkillTree : SkillTree
         tower.IncreaseDamageByPercent(GetDamageBoostPercentage());
         tower.IncreaseAttackSpeed(GetAttackSpeedBoostPercentage());
         tower.IncreaseRange(GetRangeBoostPercentage());
+    }
+
+    public override IAttack ModifyAttack(IAttack attack)
+    {
+        if(skills["Splash Damage"].GetCurrentLevel() > 0)
+        {
+            attack.AddAttackComponent(CreateSplashAttack());
+        }
+
+        if(skills["Ignition"].GetCurrentLevel() > 0)
+        {
+            attack.AddStatusEffect(new Ignite(igniteDamage, igniteDuration));
+        }
+
+        
+
+        return attack;
     }
 
 
