@@ -10,41 +10,36 @@ public abstract class AbstractAttack : IAttack
 {
     protected float damage;
     protected ElementType damageType;
-    List<StatusEffect> statusEffects = new List<StatusEffect>();
+    List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
     List<AbstractEnemy> invalidTargets = new List<AbstractEnemy>();
-    List<IAttack> attackComponents = new List<IAttack>();
+    List<IAttackComponent> attackComponents = new List<IAttackComponent>();
+
+    public void AddAttackComponent(IAttackComponent component) { attackComponents.Add(component); }
+
+    public void AddInvalidTarget(AbstractEnemy enemy) { invalidTargets.Add(enemy); }
+
+    public void AddStatusEffect(IStatusEffect statusEffect) { statusEffects.Add(statusEffect); }
+    public void AddStatusEffects(List<IStatusEffect> effects) { statusEffects.AddRange(effects); }
 
     public float GetDamage() { return damage; }
 
     public ElementType GetDamageType() { return damageType; }
 
-    public void AddAttackComponent(IAttack component) { attackComponents.Add(component); }
+    public List<IStatusEffect> GetStatusEffects(){ return statusEffects; }
 
-    public virtual List<StatusEffect> GetStatusEffects()
+    public void SetDamageType(ElementType value) { damageType = value; }
+
+
+    public void ApplyDamagePercentModifiers(float percent) { damage += damage * percent / 100; }
+
+    public void DoAttackComponents()
     {
-        foreach (IAttack ac in attackComponents)
+        foreach(IAttackComponent component in attackComponents)
         {
-            statusEffects.AddRange(ac.GetStatusEffects());
+            component.DoAttack();
         }
-        return statusEffects;
     }
 
-    public void ApplyDamagePercentModifiers(float percent)
-    {
-        damage += damage * percent / 100;
-    }
-
-    public void AddStatusEffect(StatusEffect effect)
-    {
-        statusEffects.Add(effect);
-    }
-
-    public abstract void PerformSpecialAction();
-
-    public void AddInvalidTarget(AbstractEnemy enemy)
-    {
-        invalidTargets.Add(enemy);
-    }
 }
 

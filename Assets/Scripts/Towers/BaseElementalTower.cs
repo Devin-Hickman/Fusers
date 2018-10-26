@@ -13,13 +13,15 @@ using Unity;
 class BaseElementalTower : AbstractTower
 {
 
+    //TODO: Fix Elemental tower for unity's component system
+
     int upgradePaths_Count = 0;
     int upgradePaths_Cap = 2;
 
     float baseDamage;
     ElementType baseElementType = ElementType.NORMAL;
 
-    List<SkillTree> skillTrees = new List<SkillTree>();
+    List<ISkillTree> skillTrees = new List<ISkillTree>();
 
     public void Awake()
     {
@@ -36,12 +38,11 @@ class BaseElementalTower : AbstractTower
         throw new NotImplementedException();
     }
 
-    public void AddUpgradePath(SkillTree skillTree)
+    public void AddUpgradePath(ISkillTree skillTree)
     {
         if (upgradePaths_Count < upgradePaths_Cap)
         {
-            skillTrees.Add(skillTree);
-            this.gameObject.AddComponent<SkillTree>();
+            this.gameObject.AddComponent<ISkillTree>();
             skillTree.ApplyTowerModifiers(this);
             ApplyNewSprite(skillTree.GetSprite());
         }
@@ -53,7 +54,7 @@ class BaseElementalTower : AbstractTower
 
     protected override IAttack ConstructAttack()
     {
-        IAttack attack = new Attack(baseDamage, baseElementType);
+        IAttack attack = new BaseAttack(baseDamage, baseElementType);
         foreach (SkillTree s in skillTrees)
         {
             s.ModifyAttack(attack);

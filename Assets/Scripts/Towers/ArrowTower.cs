@@ -38,7 +38,7 @@ public class ArrowTower : AbstractTower {
 
     protected override IAttack ConstructAttack()
     {
-        return new Attack(attackDamage, attackDamageType);
+        return new BaseAttack(attackDamage, attackDamageType);
     }
 
     void OnDrawGizmos()

@@ -22,6 +22,12 @@ public interface IAttack
     ElementType GetDamageType();
 
     /// <summary>
+    /// Sets the damage type of the attack
+    /// </summary>
+    /// <param name="value"></param>
+    void SetDamageType(ElementType value);
+
+    /// <summary>
     /// Adds an invalid target to the attack, preventing attacks from hitting the 
     /// wrong targets
     /// </summary>
@@ -32,12 +38,12 @@ public interface IAttack
     /// Adds an attack component to the attack such as Splash, Chain, Splitter
     /// </summary>
     /// <param name="component"></param>
-    void AddAttackComponent(IAttack component);
+    void AddAttackComponent(IAttackComponent component);
 
     /// <summary>
     /// Performs any special additions to the attack, comes from attack components
     /// </summary>
-    void PerformSpecialAction();
+    void DoAttackComponents();
 
     /// <summary>
     /// Applies any damage modifiers to the attack's base damage
@@ -48,14 +54,20 @@ public interface IAttack
     /// <summary>
     /// Adds any status effects to the attack
     /// </summary>
-    void AddStatusEffect(StatusEffect statusEffect);
+    void AddStatusEffect(IStatusEffect statusEffect);
+
+    /// <summary>
+    /// Adds a list of status effects to the attack
+    /// </summary>
+    /// <param name="statusEffects"></param>
+    void AddStatusEffects(List<IStatusEffect> statusEffects);
 
     /// <summary>
     /// Returns a list of status effects associated with the attack, these effects
     /// can include DoT's, slows, armor reductions, etc..
     /// </summary>
     /// <returns></returns>
-    List<StatusEffect> GetStatusEffects();
+    List<IStatusEffect> GetStatusEffects();
 
 
 }

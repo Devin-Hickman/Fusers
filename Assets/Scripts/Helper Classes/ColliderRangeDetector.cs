@@ -32,7 +32,7 @@ class ColliderRangeDetector : MonoBehaviour
         searchRadius = radius;
     }
 
-    public Collider2D[] FindEnemiesInAttackRadius()
+    public static Collider2D[] FindEnemiesInAttackRadius(float radius)
     {
         //Uses a layermask to filter colliders for enemy units only. Enemies must be on Enemy layer or else they will not be found
         //Can use this to add in camoflauge units. If the tower does not have a camoflague sensor, it will ignore that layer, but if

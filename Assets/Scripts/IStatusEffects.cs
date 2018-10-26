@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 
 
-public interface StatusEffect
+public interface IStatusEffect
 {
-    void DoStatusEffect(IEnemy enemy);
+    void ApplyStatusEffect(IEnemy enemy);
 }
 

@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-interface AttackComponent
+public class AbstractAttackComponent : MonoBehaviour, IAttackComponent
 {
-    List<StatusEffect> GetStatusEffects();
+    List<IStatusEffect> component_statusEffects;
+
+    List<IStatusEffect> IAttackComponent.GetStatusEffects()
+    {
+        return component_statusEffects;
+    }
 }
 

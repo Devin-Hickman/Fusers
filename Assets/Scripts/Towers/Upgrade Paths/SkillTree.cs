@@ -6,7 +6,7 @@ using Fusers;
 using Unity;
 using UnityEngine;
 
-abstract class SkillTree : MonoBehaviour
+abstract class SkillTree : MonoBehaviour, ISkillTree
 {
     [SerializeField]
     protected Dictionary<String, Skill> skills = new Dictionary<string, Skill>();

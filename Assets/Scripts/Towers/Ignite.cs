@@ -7,7 +7,7 @@ using Fusers;
 /// <summary>
 /// Ignites an enemy, dealing damage over time for x seconds
 /// </summary>
-public class Ignite : StatusEffect
+public class Ignite : IStatusEffect
 {
     float damagerPerTick = 0;
     float duration = 0;

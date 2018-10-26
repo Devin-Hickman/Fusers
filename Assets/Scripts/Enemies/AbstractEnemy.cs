@@ -28,7 +28,7 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
     Rigidbody2D rb2d;
     private Vector3 targetDirection;
 
-    private List<StatusEffect> statusEffects = new List<StatusEffect>();
+    private List<IStatusEffect> statusEffects = new List<IStatusEffect>();
     protected List<ElementType> elementalWeaknesses = new List<ElementType>();
     protected List<ElementType> elementalVulnerabilities = new List<ElementType>();
 
@@ -52,19 +52,19 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
 
     private void DoStatusEffects()
     {
-        foreach(StatusEffect s in statusEffects)
+        foreach(IStatusEffect s in statusEffects)
         {
             s.DoStatusEffect(this);
         }
     }
 
-    public void AddStatusEffects(List<StatusEffect> effects)
+    public void AddStatusEffects(List<IStatusEffect> effects)
     {
         statusEffects.AddRange(effects);
     }
 
 
-    public void AddStatusEffect(StatusEffect effect)
+    public void AddStatusEffect(IStatusEffect effect)
     {
         statusEffects.Add(effect);
     }
@@ -87,7 +87,7 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
 
         health -= AdjustIncomingDamage(incomingAttack.GetDamage(), incomingAttack.GetDamageType());
 
-        incomingAttack.PerformSpecialAction();
+        incomingAttack.DoAttackComponents();
 
         if(health < 0)
         {

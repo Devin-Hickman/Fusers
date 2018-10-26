@@ -4,21 +4,24 @@ using System.Linq;
 using System.Text;
 using Fusers;
 
-public class Attack : AbstractAttack,  IAttack
+namespace Fusers
 {
-    public Attack(float _damage, ElementType elementType)
+    public enum ElementType
+    {
+        FIRE,
+        WATER,
+        AIR,
+        EARTH,
+        NORMAL
+    }
+}
+
+public class BaseAttack : AbstractAttack,  IAttack
+{
+    public BaseAttack(float _damage, ElementType elementType)
     {
         damage = _damage;
         damageType = elementType;
     }
-
-    /// <summary>
-    /// Basic actions do not have any special actions associated with them
-    /// </summary>
-    public override void PerformSpecialAction()
-    {
-        return;
-    }
-
 }
 

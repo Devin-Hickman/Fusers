@@ -71,15 +71,19 @@ class FireSkillTree : SkillTree
         return (float)(skills["Attack Speed Buff"].GetCurrentLevel() * 5);
     }
 
-    private SplashAttack CreateSplashAttack()
+    private SplashAttackComponent CreateSplashAttackComponent()
     {
+
         float splashAttackDamage = skills["Splash Damage"].GetCurrentLevel() * 50;
         float splashAttackRadius = skills["Splash Damage"].GetCurrentLevel() * 2;
+        SplashAttackComponent tmpSplashAttack = new SplashAttackComponent(splashAttackDamage, splashAttackRadius);
 
-        SplashAttack s = new SplashAttack(splashAttackDamage, splashAttackRadius);
-        s.AddStatusEffect(new Ignite(igniteDamage, igniteDuration));
+        if (SkillActive("Ignition"))
+        {
+            tmpSplashAttack.AddStatusEffect(new Ignite(igniteDamage, igniteDuration));
+        }
 
-        return new SplashAttack(splashAttackDamage, splashAttackRadius);
+        return tmpSplashAttack;
     }
 
     public override void ApplyTowerModifiers(BaseElementalTower tower)
@@ -91,19 +95,23 @@ class FireSkillTree : SkillTree
 
     public override IAttack ModifyAttack(IAttack attack)
     {
-        if(skills["Splash Damage"].GetCurrentLevel() > 0)
+        if(SkillActive("Splash Damage"))
         {
-            attack.AddAttackComponent(CreateSplashAttack());
+            attack.AddAttackComponent(CreateSplashAttackComponent());
         }
 
-        if(skills["Ignition"].GetCurrentLevel() > 0)
+        if (SkillActive("Ignition"))
         {
             attack.AddStatusEffect(new Ignite(igniteDamage, igniteDuration));
         }
 
-        
-
+      
         return attack;
+    }
+
+    private bool SkillActive(string skillName)
+    {
+        return skills[skillName].GetCurrentLevel() > 0;
     }
 
 

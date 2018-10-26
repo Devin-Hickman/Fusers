@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusers;
 
-public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
+public abstract class AbstractTower : MonoBehaviour, ITower  {
 
     [SerializeField] protected float attackRadius;
     [SerializeField] protected float attackDamage;
@@ -58,7 +58,7 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
         enemiesInRangeDetector.HideRangeIndicator();
     }
 
-    protected virtual void DoAttack(AbstractEnemy enemy)
+    public virtual void Shoot(IEnemy enemy)
     {
         
         if (!hasAttacked)
@@ -78,6 +78,7 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
 
     int towerState = 0;
     public void SwapSprite()
+
     {
         switch (towerState)
         {
@@ -99,4 +100,16 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
     protected abstract IAttack ConstructAttack();
 
     protected abstract float CalculateTowerAttackDamage();
+
+    public void AddTowerComponent(ITowerComponent towerComponent)
+    {
+        Debug.Log("Adding Tower Component");
+        throw new System.NotImplementedException();
+    }
+
+    public void Purchase()
+    {
+        Debug.Log("Purhcased tower");
+        throw new System.NotImplementedException();
+    }
 }

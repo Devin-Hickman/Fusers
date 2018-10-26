@@ -5,10 +5,10 @@ using System.Text;
 using Fusers;
 
 
-interface IEnemy
+public interface IEnemy
 {
-    void AddStatusEffect(StatusEffect effect);
-    void AddStatusEffects(List<StatusEffect> effects);
+    void AddStatusEffect(IStatusEffect effect);
+    void AddStatusEffects(List<IStatusEffect> effects);
 
     void OnAttacked(IAttack incomingAttack);
     void Move();
