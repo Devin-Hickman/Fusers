@@ -9,6 +9,7 @@ public class ArrowTower : AbstractTower {
     [SerializeField]
     private ElementAugment elementalAugment;
 
+
     public override void AddAugmentation(Augment augment)
     {
         if(augment is ElementAugment)
@@ -27,7 +28,6 @@ public class ArrowTower : AbstractTower {
         }
         else
             return attackDamage;
-
     }
 
 

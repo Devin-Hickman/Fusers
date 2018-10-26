@@ -17,10 +17,14 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
 
     [SerializeField] protected int costToPurchase;
     [SerializeField] protected int costToUpgrade;
+    protected Sprite sprite;
+
+    private ColliderRangeDetector enemiesInRangeDetector;
 
 	// Use this for initialization
 	void Start () {
         attackCooldown = 1 / attacksPerSecond;
+        enemiesInRangeDetector = GetComponent<ColliderRangeDetector>();
         //Get the range indicator that is displayed for the tower and set disable it.
         rangeIndicator = GetComponentInChildren<SpriteRenderer>().gameObject;
         //May need to be changed for different scaling on phones
@@ -29,15 +33,7 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
         
 	}
 
-    public void ShowRangeIndicator()
-    {
-        rangeIndicator.SetActive(true);
-    }
 
-    public void HideRangeIndicator()
-    {
-        rangeIndicator.SetActive(false);
-    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -52,10 +48,11 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
 
     protected virtual void DoAttack(AbstractEnemy enemy)
     {
+        
         if (!hasAttacked)
         {
             lastAttackTime = Time.time;
-            enemy.OnAttacked(CalculateTowerAttackDamage(), attackDamageType);
+            enemy.OnAttacked(ConstructAttack());
             hasAttacked = true;
         }
         else if(Time.time > lastAttackTime + attackCooldown)
@@ -65,11 +62,7 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
         }
     }
 
-    protected Collider2D[] FindEnemiesInAttackRadius()
-    {
-        int layerMask = 1 << LayerMask.NameToLayer("Enemy");
-        return Physics2D.OverlapCircleAll(transform.position, attackRadius, layerMask);
-    }
+    public float GetDamage() { return attackDamage; }
 
     int towerState = 0;
     public void SwapSprite()
@@ -90,6 +83,8 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
 
 
     public abstract void AddAugmentation(Augment augment);
+
+    protected abstract IAttack ConstructAttack();
 
     protected abstract float CalculateTowerAttackDamage();
 }

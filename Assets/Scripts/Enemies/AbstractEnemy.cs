@@ -28,6 +28,10 @@ public abstract class AbstractEnemy : MonoBehaviour {
     Rigidbody2D rb2d;
     private Vector3 targetDirection;
 
+    private List<StatusEffect> statusEffects = new List<StatusEffect>();
+    protected List<ElementType> elementalWeaknesses = new List<ElementType>();
+    protected List<ElementType> elementalVulnerabilities = new List<ElementType>();
+
 	// Use this for initialization
 	 void Start () {
         startPosition = this.transform.position;
@@ -43,6 +47,26 @@ public abstract class AbstractEnemy : MonoBehaviour {
 	void Update () {
 
         Move();
+        
+    }
+
+    private void DoStatusEffects()
+    {
+        foreach(StatusEffect s in statusEffects)
+        {
+            s.DoStatusEffect(this);
+        }
+    }
+
+    private void AddStatusEffects(List<StatusEffect> effects)
+    {
+        statusEffects.AddRange(effects);
+    }
+
+
+    public void AddStatusEffect(StatusEffect effect)
+    {
+        statusEffects.Add(effect);
     }
 
     private void Move()
@@ -55,15 +79,34 @@ public abstract class AbstractEnemy : MonoBehaviour {
         UpdateDestinationPoint();
     }
 
-    public virtual void OnAttacked(float incomingDamage, ElementType attackType)
+    public virtual void OnAttacked(IAttack incomingAttack)
     {
         Debug.Log("Under attack");
-        health -= incomingDamage;
+        incomingAttack.AddInvalidTarget(this);
+        AddStatusEffects(incomingAttack.GetStatusEffects());
+
+        health -= AdjustIncomingDamage(incomingAttack.GetDamage(), incomingAttack.GetDamageType());
+
+        incomingAttack.PerformSpecialAction();
+
         if(health < 0)
         {
             OnDeath();
         }
+
+        float AdjustIncomingDamage(float damage, ElementType damageType)
+        {
+            if (elementalVulnerabilities.Contains(damageType))
+            {
+                damage *= 1.25f;
+            } else if (elementalWeaknesses.Contains(damageType))
+            {
+                damage /= 1.25f;
+            }
+            return damage;
+        }
     }
+
 
     private void ReachedEnd()
     {
