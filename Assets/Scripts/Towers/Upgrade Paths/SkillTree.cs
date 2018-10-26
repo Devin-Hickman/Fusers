@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Fusers;
+using Unity;
+using UnityEngine;
 
-abstract class SkillTree
+abstract class SkillTree : MonoBehaviour
 {
+    [SerializeField]
     protected Dictionary<String, Skill> skills = new Dictionary<string, Skill>();
 
     protected List<Skill> tierOneSkills = new List<Skill>();
@@ -75,10 +78,12 @@ abstract class SkillTree
                     skills[skillName].IncreaseCurrentLevel(increment);
                 break;
         }
-        bool CheckUnlockedTier(Skill s)
-        {
-            return s.CurrentEqualsMaxLevel();
-        }
+
+    }
+
+    bool CheckUnlockedTier(Skill s)
+    {
+        return s.CurrentEqualsMaxLevel();
     }
 
     private bool CheckTierTwoUnlock()

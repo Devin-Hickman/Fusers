@@ -2,23 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
+using Unity;
 
 
 class ColliderRangeDetector : MonoBehaviour
 {
-    string layerToSearch;
+    public string layerToSearch;
     List<string> layerstoSearch = null;
     float searchRadius = 0;
+    SpriteRenderer rangeIndicator;
 
-    ColliderRangeDetector(string layer, float radius)
+    void Awake()
     {
-        layerToSearch = layer;
-        searchRadius = radius;
+        rangeIndicator = this.GetComponent<SpriteRenderer>();
     }
 
-    ColliderRangeDetector(List<string> layerList, float radius)
+    void Start()
     {
-        layerstoSearch = layerList;
+
+        Debug.Log(rangeIndicator.material);
+        //May need to be changed for different scaling on phones
+        rangeIndicator.transform.localScale = new Vector3(searchRadius * 1.5f, searchRadius * 1.5f, 0);
+        rangeIndicator.enabled = false;
+    }
+
+    public void ConstructValues(float radius)
+    {
         searchRadius = radius;
     }
 
@@ -38,7 +48,7 @@ class ColliderRangeDetector : MonoBehaviour
             int finalLayerMask = 0;
             foreach (string layer in layerstoSearch)
             {
-                int layerMask = 1 << layerMask.NameToLayer(layer);
+                int layerMask = 1 << LayerMask.NameToLayer(layer);
                 finalLayerMask = finalLayerMask | layerMask;
             }
             return Physics2D.OverlapCircleAll(transform.position, searchRadius, finalLayerMask);
@@ -48,12 +58,12 @@ class ColliderRangeDetector : MonoBehaviour
 
     public void ShowRangeIndicator()
     {
-        rangeIndicator.SetActive(true);
+        rangeIndicator.enabled = true;
     }
 
     public void HideRangeIndicator()
     {
-        rangeIndicator.SetActive(false);
+        rangeIndicator.enabled = false;
     }
 }
 

@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour {
     private GameObject GameObjctClickedOn()
     {
         GameObject clickedObject = null;
+        
         Camera cam = Camera.main;
         RaycastHit2D hit = Physics2D.Raycast(cam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         if (hit.collider != null) 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Fusers;
+using UnityEngine;
+using Unity;
 
 
 /// <summary>
@@ -13,6 +15,9 @@ class BaseElementalTower : AbstractTower
 
     int upgradePaths_Count = 0;
     int upgradePaths_Cap = 2;
+
+    float baseDamage;
+    ElementType baseElementType = ElementType.NORMAL;
 
     List<SkillTree> skillTrees = new List<SkillTree>();
 
@@ -36,7 +41,7 @@ class BaseElementalTower : AbstractTower
         if (upgradePaths_Count < upgradePaths_Cap)
         {
             skillTrees.Add(skillTree);
-            this.AddComponent<skillTree>();
+            this.gameObject.AddComponent<SkillTree>();
             skillTree.ApplyTowerModifiers(this);
             ApplyNewSprite(skillTree.GetSprite());
         }
@@ -48,11 +53,12 @@ class BaseElementalTower : AbstractTower
 
     protected override IAttack ConstructAttack()
     {
-        IAttack attack = new Attack();
+        IAttack attack = new Attack(baseDamage, baseElementType);
         foreach (SkillTree s in skillTrees)
         {
-            s.ModifyAttack(attack, this);
+            s.ModifyAttack(attack);
         }
+        return attack;
     }
 
     public void IncreaseRange(float percent)

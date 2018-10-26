@@ -9,11 +9,10 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
     [SerializeField] protected float attackDamage;
     [SerializeField] protected float attacksPerSecond;
     //rangeIndicator scale (radius) is dependent on attackRadius * 1.5
-    GameObject rangeIndicator;
     private float lastAttackTime;
     private float attackCooldown; // = 1/attacksPerSecond
     private bool hasAttacked = false;
-    protected ElementType attackDamageType;
+    [SerializeField] protected ElementType attackDamageType;
 
     [SerializeField] protected int costToPurchase;
     [SerializeField] protected int costToUpgrade;
@@ -21,23 +20,26 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
 
     private ColliderRangeDetector enemiesInRangeDetector;
 
+    void Awake()
+    {
+        enemiesInRangeDetector = this.GetComponentInChildren<ColliderRangeDetector>();
+    }
 	// Use this for initialization
-	void Start () {
+	protected void Start () {
         attackCooldown = 1 / attacksPerSecond;
-        enemiesInRangeDetector = GetComponent<ColliderRangeDetector>();
+
+        Debug.Log(enemiesInRangeDetector.name);
         //Get the range indicator that is displayed for the tower and set disable it.
-        rangeIndicator = GetComponentInChildren<SpriteRenderer>().gameObject;
         //May need to be changed for different scaling on phones
-        rangeIndicator.transform.localScale = new Vector3(attackRadius * 1.5f, attackRadius * 1.5f, 0);
-        rangeIndicator.SetActive(false);
+        enemiesInRangeDetector.transform.localScale = new Vector3(attackRadius * 1.5f, attackRadius * 1.5f, 0);
+        enemiesInRangeDetector.ConstructValues(attackRadius);
+        enemiesInRangeDetector.HideRangeIndicator();
         
 	}
 
-
-	
 	// Update is called once per frame
 	void Update () {
-        Collider2D[] enemiesInRange = FindEnemiesInAttackRadius();
+        Collider2D[] enemiesInRange = enemiesInRangeDetector.FindEnemiesInAttackRadius();
         if(enemiesInRange.Length > 0)
         {
             AbstractEnemy enemy = enemiesInRange[0].gameObject.GetComponent<AbstractEnemy>();
@@ -45,6 +47,16 @@ public abstract class AbstractTower : MonoBehaviour, IAugmentable  {
             DoAttack(enemy);
         }   
 	}
+
+    public void ShowRangeIndicator()
+    {
+        enemiesInRangeDetector.ShowRangeIndicator();
+    }
+
+    public void HideRangeIndicator()
+    {
+        enemiesInRangeDetector.HideRangeIndicator();
+    }
 
     protected virtual void DoAttack(AbstractEnemy enemy)
     {

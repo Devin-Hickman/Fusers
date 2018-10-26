@@ -9,6 +9,12 @@ public class ArrowTower : AbstractTower {
     [SerializeField]
     private ElementAugment elementalAugment;
 
+    new void Start()
+    {
+        base.Start();
+        attackDamageType = ElementType.NORMAL;
+    }
+
 
     public override void AddAugmentation(Augment augment)
     {
@@ -30,6 +36,10 @@ public class ArrowTower : AbstractTower {
             return attackDamage;
     }
 
+    protected override IAttack ConstructAttack()
+    {
+        return new Attack(attackDamage, attackDamageType);
+    }
 
     void OnDrawGizmos()
     {

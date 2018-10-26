@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Fusers;
 
-
-public interface StatusEffect
+public interface IEnemy
 {
-    void DoStatusEffect(IEnemy enemy);
+
 }
 

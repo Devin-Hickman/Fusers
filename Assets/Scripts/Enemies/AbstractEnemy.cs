@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using Fusers;
 using System;
 
-public abstract class AbstractEnemy : MonoBehaviour {
+public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
 
     [Serializable]
     public class EnemyDeathEvent : UnityEvent<Core> { };
@@ -93,18 +93,19 @@ public abstract class AbstractEnemy : MonoBehaviour {
         {
             OnDeath();
         }
+    }
 
-        float AdjustIncomingDamage(float damage, ElementType damageType)
+    private float AdjustIncomingDamage(float damage, ElementType damageType)
+    {
+        if (elementalVulnerabilities.Contains(damageType))
         {
-            if (elementalVulnerabilities.Contains(damageType))
-            {
-                damage *= 1.25f;
-            } else if (elementalWeaknesses.Contains(damageType))
-            {
-                damage /= 1.25f;
-            }
-            return damage;
+            damage *= 1.25f;
         }
+        else if (elementalWeaknesses.Contains(damageType))
+        {
+            damage /= 1.25f;
+        }
+        return damage;
     }
 
 
