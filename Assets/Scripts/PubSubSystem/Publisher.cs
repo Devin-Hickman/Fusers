@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ConsoleApp1
-{
+
     public class Publisher
     {
         public Publisher()
@@ -21,6 +20,5 @@ namespace ConsoleApp1
         ENEMY_REACHED_GOAL,
         ITEMS_DROPPED
     }
-}
 
 

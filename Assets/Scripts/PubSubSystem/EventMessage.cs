@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleApp1
-{
+
     public class EventMessage
     {
         public EventMessage(EventTopic t)
@@ -12,4 +11,4 @@ namespace ConsoleApp1
         }
         public EventTopic topic;
     }
-}
+

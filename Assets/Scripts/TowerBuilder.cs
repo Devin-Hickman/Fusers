@@ -7,7 +7,8 @@ public class TowerBuilder : MonoBehaviour {
 
     private bool buildMode;
     public bool BuildMode { get { return buildMode; } }
-    GameObject towerToBuild;
+
+    static GameObject towerToBuild = null;
 
 	// Use this for initialization
 	void Start () {
@@ -29,25 +30,32 @@ public class TowerBuilder : MonoBehaviour {
                 towerToBuild.GetComponent<AbstractTower>().HideRangeIndicator();
             }
         }
-        towerToBuild.GetComponent<AbstractTower>().HideRangeIndicator();
 	}
 
     private void InstantiateTower(string towerFileName)
     {
-       GameObject tower = (GameObject) Instantiate(Resources.Load("Tower"));
-        tower.transform.position = towerToBuild.transform.position;
-        
+        towerToBuild = (GameObject) Instantiate(Resources.Load("Tower"));
+        towerToBuild.AddComponent<SpriteRenderer>();
+        towerToBuild.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("baseTower");
+        towerToBuild.transform.localScale = new Vector3(4, 4, 1);
+    }
+
+    private void OutputCannotBuyTower()
+    {
+        Debug.Log("Not enough cores to buy new tower");
     }
 
     public void buildTower(string towerSpriteFileName)
     {
-        if (playerData.GetNormalCoresCount() > 10)
+        Debug.Log("Building tower");
+        if (playerData.GetNormalCoresCount() >= 0)
         {
             buildMode = true;
-            towerToBuild = new GameObject("towerBlueprint");
-            towerToBuild.AddComponent<SpriteRenderer>();
-            towerToBuild.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("baseTower");
-            towerToBuild.transform.localScale = new Vector3(4, 4, 1);
+            InstantiateTower(towerSpriteFileName);
+        }
+        else
+        {
+            OutputCannotBuyTower();
         }
 
         

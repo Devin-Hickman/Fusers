@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleApp1
-{
+
     public class Subscriber
     {
         public List<EventTopic> subscribedTopics = new List<EventTopic>();
@@ -34,6 +33,6 @@ namespace ConsoleApp1
             Console.WriteLine("Received message {0}", e.topic);
         }
     }
-}
+
 
 
