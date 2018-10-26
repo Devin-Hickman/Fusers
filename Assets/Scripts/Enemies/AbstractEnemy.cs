@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using Fusers;
 using System;
 
-public abstract class AbstractEnemy : MonoBehaviour {
+public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
 
     [Serializable]
     public class EnemyDeathEvent : UnityEvent<Core> { };
@@ -58,7 +58,7 @@ public abstract class AbstractEnemy : MonoBehaviour {
         }
     }
 
-    private void AddStatusEffects(List<StatusEffect> effects)
+    public void AddStatusEffects(List<StatusEffect> effects)
     {
         statusEffects.AddRange(effects);
     }
@@ -69,7 +69,7 @@ public abstract class AbstractEnemy : MonoBehaviour {
         statusEffects.Add(effect);
     }
 
-    private void Move()
+    public void Move()
     {
         rb2d.velocity = targetDirection * moveSpeed;
     }
@@ -91,7 +91,7 @@ public abstract class AbstractEnemy : MonoBehaviour {
 
         if(health < 0)
         {
-            OnDeath();
+            DoDeath();
         }
 
         float AdjustIncomingDamage(float damage, ElementType damageType)
@@ -120,6 +120,11 @@ public abstract class AbstractEnemy : MonoBehaviour {
         currentDestinationPoint = pathPoints[currentDestinationPointIndex];
         targetDirection = (currentDestinationPoint.position - transform.position).normalized;
         
+    }
+
+    public void DoDeath()
+    {
+        OnDeath();
     }
 
     private void OnDeath()
