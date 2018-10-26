@@ -5,12 +5,13 @@ using System.Text;
 
 class EarthSkillTree : SkillTree
 {
-    public override AbstractAttack ApplyAttackModifiers(AbstractAttack attack)
+
+    public override void ApplyTowerModifiers(BaseElementalTower tower)
     {
         throw new NotImplementedException();
     }
 
-    public override void ApplyTowerModifiers()
+    public override IAttack ModifyAttack(IAttack attack)
     {
         throw new NotImplementedException();
     }

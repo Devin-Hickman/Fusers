@@ -93,18 +93,19 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
         {
             DoDeath();
         }
+    }
 
-        float AdjustIncomingDamage(float damage, ElementType damageType)
+    private float AdjustIncomingDamage(float damage, ElementType damageType)
+    {
+        if (elementalVulnerabilities.Contains(damageType))
         {
-            if (elementalVulnerabilities.Contains(damageType))
-            {
-                damage *= 1.25f;
-            } else if (elementalWeaknesses.Contains(damageType))
-            {
-                damage /= 1.25f;
-            }
-            return damage;
+            damage *= 1.25f;
         }
+        else if (elementalWeaknesses.Contains(damageType))
+        {
+            damage /= 1.25f;
+        }
+        return damage;
     }
 
 

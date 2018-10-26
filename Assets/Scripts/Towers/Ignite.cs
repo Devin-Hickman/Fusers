@@ -19,5 +19,11 @@ public class Ignite : StatusEffect
         damagerPerTick = damage;
         duration = length;
     }
+
+    public void DoStatusEffect(IEnemy enemy)
+    {
+
+    }
+
 }
 
