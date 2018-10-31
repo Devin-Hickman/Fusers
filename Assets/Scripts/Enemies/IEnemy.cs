@@ -13,5 +13,6 @@ public interface IEnemy
     void OnAttacked(IAttack incomingAttack);
     void Move();
     void DoDeath();
+    void TakeDamage(float damage);
 }
 

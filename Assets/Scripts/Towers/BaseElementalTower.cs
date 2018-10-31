@@ -10,23 +10,24 @@ using Unity;
 /// <summary>
 /// Represents a basic elemental tower that can be upgraded to a specific element
 /// </summary>
-class BaseElementalTower : AbstractTower
+public class BaseElementalTower : AbstractTower
 {
 
     //TODO: Fix Elemental tower for unity's component system
 
     int upgradePaths_Count = 0;
     int upgradePaths_Cap = 2;
+    public bool isFireTree = false;
 
-    float baseDamage;
-    ElementType baseElementType = ElementType.NORMAL;
-
-    List<ISkillTree> skillTrees = new List<ISkillTree>();
-
-    public void Awake()
+    protected override void Start()
     {
-
+        FireSkillTree fst = new GameObject().AddComponent<FireSkillTree>();
+        AddUpgradePath(fst);
+        Destroy(fst.gameObject);
+        base.Start();
     }
+
+    public List<ISkillTree> skillTrees = new List<ISkillTree>();
 
     public override void AddAugmentation(Augment augment)
     {
@@ -40,11 +41,17 @@ class BaseElementalTower : AbstractTower
 
     public void AddUpgradePath(ISkillTree skillTree)
     {
+        this.gameObject.AddComponent<FireSkillTree>();
         if (upgradePaths_Count < upgradePaths_Cap)
         {
-            this.gameObject.AddComponent<ISkillTree>();
-            skillTree.ApplyTowerModifiers(this);
-            ApplyNewSprite(skillTree.GetSprite());
+            Debug.Log("Added tree");
+            skillTrees.Add(skillTree);
+            IncreaseRange(skillTree.GetRangeBoostPercentage());
+            IncreaseAttackSpeed(skillTree.GetAttackSpeedBoostPercentage());
+            IncreaseDamageByPercent(skillTree.GetDamageBoostPercentage());
+            //TODO: Sprite swapping based on skill trees on tower
+            // ApplyNewSprite(skillTree.GetSprite());
+            upgradePaths_Count++;
         }
         else
         {
@@ -54,7 +61,7 @@ class BaseElementalTower : AbstractTower
 
     protected override IAttack ConstructAttack()
     {
-        IAttack attack = new BaseAttack(baseDamage, baseElementType);
+        IAttack attack = new BaseAttack(attackDamage, attackDamageType);
         foreach (SkillTree s in skillTrees)
         {
             s.ModifyAttack(attack);
@@ -62,17 +69,17 @@ class BaseElementalTower : AbstractTower
         return attack;
     }
 
-    public void IncreaseRange(float percent)
+    private void IncreaseRange(float percent)
     {
         attackRadius += attackRadius * percent;
     }
 
-    public void IncreaseAttackSpeed(float percent)
+    private void IncreaseAttackSpeed(float percent)
     {
         attacksPerSecond += attacksPerSecond * percent;
     }
 
-    public void IncreaseDamageByPercent(float percent)
+    private void IncreaseDamageByPercent(float percent)
     {
         attackDamage += attackDamage * percent;
     }

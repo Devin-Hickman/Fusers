@@ -47,7 +47,17 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
 	void Update () {
 
         Move();
+        DoStatusEffects();
         
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if(health < 0)
+        {
+            DoDeath();
+        }
     }
 
     private void DoStatusEffects()
@@ -87,7 +97,7 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
 
         health -= AdjustIncomingDamage(incomingAttack.GetDamage(), incomingAttack.GetDamageType());
 
-        incomingAttack.DoAttackComponents();
+        incomingAttack.DoAttackComponents(transform.position.x, transform.position.y, transform.position.z);
 
         if(health < 0)
         {

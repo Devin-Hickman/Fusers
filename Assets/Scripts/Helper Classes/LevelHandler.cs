@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections;
 using Fusers;
+using Unity;
+using UnityEngine;
 
-public class LevelHandler
+public class LevelHandler : MonoBehaviour
 {
-    EnemySpawner spawner;
+    [SerializeField] EnemySpawner spawner;
     int currentLevel = 0;
 
     public float timeBetweenLevels = 30f;
     private float timeLevelEnded = 0;
     private bool forceLevelStart = false;
+    public int numEnemiesOnLevel;
+    private bool playerClickedNextLevel = false;
 
-
-    void Awake()
-    {
-        spawner = GetComponent<EnemySpawner>();
-    }
     void Start()
     {
 
@@ -31,24 +27,38 @@ public class LevelHandler
         }
     }
 
+    public void PlayerClickedNextLevel()
+    {
+        //TODO: Prevent button from being clicked while level is in progress
+
+        playerClickedNextLevel = true;
+        StartLevel();
+    }
+
     public void StartLevel()
     {
+        //TODO: Change spawn delay & enemies spawn based on level
+        float tempSpawnDelay = 0.5f;
+        Debug.Log("Starting Next Level");
+        GameObject enemy = (GameObject)Resources.Load("Enemy");
         currentLevel++;
-        StartCoroutine(spawner.SpawnEnemy());
+        spawner.StartSpawningEnemies(enemy, numEnemiesOnLevel, tempSpawnDelay);
     }
 
     public void EndLevel()
     {
+        //TODO: Add logic to determine if level ended when all enemies are dead or all enemies reach goal
         Debug.Log("Level ended");
-        StartCountdownUntilNextLevel();
+        StartCoroutine("StartCountdownUntilNextLevel");
         forceLevelStart = false;
+        playerClickedNextLevel = false;
         StartLevel();
     }
 
     public IEnumerator StartCoutdownUntilNextLevel()
     {
         timeLevelEnded = Time.time;
-        yield return new waitUntil(() playerClickedNextLevel == true || forceLevelStart == true)
+        yield return new WaitUntil(() => playerClickedNextLevel == true || forceLevelStart == true);
     }
  
 

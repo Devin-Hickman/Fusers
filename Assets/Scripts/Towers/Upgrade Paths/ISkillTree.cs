@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Fusers;
 
-interface ISkillTree
+public interface ISkillTree
 {
     /// <summary>
     /// Applifies any modifiers to the attack
@@ -12,11 +12,7 @@ interface ISkillTree
     /// <param name="attack">The attack to be modified</param>
     /// <returns></returns>
     IAttack ModifyAttack(IAttack attack);
-    /// <summary>
-    /// Applies any tower modifiers to the tower
-    /// </summary>
-    /// <param name="tower">The tower to be modified</param>
-    void ApplyTowerModifiers(BaseElementalTower tower);
+
     /// <summary>
     /// Resets all skill points spent in a skill to 0. Refunds points spent for new allocation
     /// </summary>
@@ -30,5 +26,20 @@ interface ISkillTree
     /// <param name="increment">Amount of points being spent to increment the skill level. 1-1 ratio. </param>
     /// <param name="tier">The tier the skills belongs to (1, 2, 3)</param>
     void IncreaseSkillLevel(String skillName, int increment, int tier);
+
+    float GetDamageBoostPercentage();
+    /// <summary>
+    /// Returns a percentage modifier to increase range
+    /// </summary>
+    /// <returns></returns>
+
+    float GetRangeBoostPercentage();
+
+    /// <summary>
+    /// Returns a percentage modifier to increase attack speed
+    /// </summary>
+    /// <returns></returns>
+
+    float GetAttackSpeedBoostPercentage();
 }
 

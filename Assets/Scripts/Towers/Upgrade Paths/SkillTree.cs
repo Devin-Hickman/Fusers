@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Fusers;
-using Unity;
 using UnityEngine;
 
-abstract class SkillTree : MonoBehaviour, ISkillTree
+ abstract class SkillTree : MonoBehaviour, ISkillTree
 {
     [SerializeField]
     protected Dictionary<String, Skill> skills = new Dictionary<string, Skill>();
@@ -23,7 +20,6 @@ abstract class SkillTree : MonoBehaviour, ISkillTree
     Sprite sprite;
 
     public abstract IAttack ModifyAttack(IAttack attack);
-    public abstract void ApplyTowerModifiers(BaseElementalTower tower);
 
     public int ResetSkill(String skillName)
     {
@@ -56,7 +52,7 @@ abstract class SkillTree : MonoBehaviour, ISkillTree
         return refundPoints;
     }
 
-    public void IncreaseSkillLevel(String skillName, int increment, int tier)
+    public virtual void IncreaseSkillLevel(string skillName, int increment, int tier)
     {
         switch (tier)
         {
@@ -111,7 +107,22 @@ abstract class SkillTree : MonoBehaviour, ISkillTree
         return sprite;
     }
 
+    //TODO: Make Abstract/ move these to normal skill tree
+    public virtual float GetDamageBoostPercentage()
+    {
+        return -100;
+    }
 
+    public virtual float GetRangeBoostPercentage()
+    {
+        return -100;
+    }
+
+
+    public virtual float GetAttackSpeedBoostPercentage()
+    {
+        return -100;
+    }
 }
 
 /// <summary>

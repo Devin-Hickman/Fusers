@@ -23,5 +23,6 @@ public class BaseAttack : AbstractAttack,  IAttack
         damage = _damage;
         damageType = elementType;
     }
+
 }
 

@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour {
     public static void addCorestoInventory(Core core)
     {
         playerData.AddCores(core);
-        Debug.Log("Added " + core.Count + " " + core.CoreType + " to inventory");
+      //  Debug.Log("Added " + core.Count + " " + core.CoreType + " to inventory");
     }
 
     public static void addCoresToInvetory(List<Core> coreList)

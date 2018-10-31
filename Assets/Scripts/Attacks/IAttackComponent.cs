@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Fusers;
 
 public interface IAttackComponent
@@ -15,6 +13,6 @@ public interface IAttackComponent
     /// <summary>
     /// Performs the attack associated with the component
     /// </summary>
-    void DoAttack();
+    void DoAttack(float x, float y, float z);
 }
 

@@ -1,7 +1,7 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using UnityEngine;
+using Unity;
 using Fusers;
 
 
@@ -10,13 +10,21 @@ public class SplashAttackComponent : AbstractAttackComponent, IAttackComponent
     private float splashDamage;
     private float splashRadius = 0;
     ElementType splashDamageType;
-    private ColliderRangeDetector splashEnemyDetecter;
+    private GameObject splashAttackObject;
+    ColliderRangeDetector detector;
     List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
-    public void SetSplashValues(float d, float r, ElementType sdt)
+    void Awake()
+    {
+        splashAttackObject = (GameObject)Instantiate(Resources.Load("Splash Attack Component"));
+        detector = splashAttackObject.GetComponent<ColliderRangeDetector>();
+    }
+
+    public void Construct(float d, float r, ElementType sdt)
     {
         splashDamage = d;
         splashRadius = r;
+        detector.ConstructValues(splashRadius, "Enemy");
         splashDamageType = sdt;
     }
 
@@ -25,27 +33,35 @@ public class SplashAttackComponent : AbstractAttackComponent, IAttackComponent
         return new SplitterAttack(splashDamage, splashDamageType);
     }
 
+    public void AddStatusEffect(IStatusEffect s)
+    {
+        statusEffects.Add(s);
+    }
+
     public void AddStatusEffects(List <IStatusEffect> s)
     {
         statusEffects.AddRange(s);
     }
 
-    public void DoAttack()
+    public override void DoAttack(float x, float y, float z)
     {
-        List<IEnemy> enemies = ColliderRangeDetector.FindEnemiesInAttackRadius(splashRadius).GetComponent<IEnemy>();
-        foreach (IEnemy enemy in enemies)
+        Vector3 originOfAttack = new Vector3(x, y, z);
+        splashAttackObject.transform.position = originOfAttack;
+        Collider2D[] enemies = detector.FindEnemiesInAttackRadius(splashRadius);
+        foreach (Collider2D enemyCol in enemies)
         {
+            Debug.Log("Doing Splash Attack Component");
+            IEnemy enemy = enemyCol.GetComponent<IEnemy>();
             IAttack attack = ConstructAttack();
             attack.AddStatusEffects(statusEffects);
             enemy.OnAttacked(attack);
         }
+        Destroy(splashAttackObject);
     }
 }
 
 public class SplitterAttack : AbstractAttack, IAttack
 {
-    float damage;
-    ElementType damageType;
 
     public SplitterAttack(float d, ElementType dt)
     {

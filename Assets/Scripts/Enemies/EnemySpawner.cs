@@ -7,9 +7,6 @@ public class EnemySpawner : MonoBehaviour {
 
     private float timeBetweenEnemySpawns = 0.5f;
     private float timeOfLastSpawn = 0;
-    private GameObject enemyToSpawn;
-
-    public GameObject EnemyToSpawn { get => enemyToSpawn; set => enemyToSpawn = value; }
 
     public void setTimeBetweenEnemySpawns(float time) { timeBetweenEnemySpawns = time; }
 
@@ -19,30 +16,25 @@ public class EnemySpawner : MonoBehaviour {
     {
         if(Time.time > timeOfLastSpawn + timeBetweenEnemySpawns)
         {
-            SpawnEnemy(10);
             timeOfLastSpawn = Time.time;
         }
 
     }
 
-    public void SpawnEnemy(int numEnemies)
+    public void StartSpawningEnemies(GameObject enemyToSpawn, int numEnemies, float spawnDelay)
     {
-        for (int i = 0; i < numEnemies; i++)
-        {
-            GameObject enemy = (GameObject)Instantiate(Resources.Load("Base enemy"));
-            enemey.addComponent<enemyToSpawn>();
-            enemy.transform.position = this.transform.position;
-        }
+        StartCoroutine(SpawnEnemy(enemyToSpawn, numEnemies, spawnDelay));
     }
-	
 
-    public void SpawnEnemy(IEnemy enemyToSpawn, int numEnemies)
+    private IEnumerator SpawnEnemy(GameObject enemyToSpawn, int numEnemies, float spawnDelay)
     {
         for(int i = 0; i < numEnemies; i++)
         {
-            GameObject enemy = (GameObject) Instantiate(Resources.Load("Base enemy"));
-            enemey.addComponent<enemyToSpawn>();
+            Debug.Log("Spawning Enemy");
+            GameObject enemy = (GameObject) Instantiate(Resources.Load("Grunt"));
             enemy.transform.position = this.transform.position;
+            yield return new WaitForSeconds(spawnDelay);
+
         }
     }
 

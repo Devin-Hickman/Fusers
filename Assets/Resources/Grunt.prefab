@@ -92,7 +92,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: AbstractEnemy+EnemyDeathEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  health: 5
+  health: 10
   moveSpeed: 4
   damage: 5
   armorType: 0
@@ -131,7 +131,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 0.5647059, g: 0, b: 0.07404597, a: 1}
   m_FlipX: 0

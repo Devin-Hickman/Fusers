@@ -5,10 +5,6 @@ using System.Text;
 
 class AirSkillTree : SkillTree
 {
-    public override void ApplyTowerModifiers(BaseElementalTower tower)
-    {
-        throw new NotImplementedException();
-    }
 
     public override IAttack ModifyAttack(IAttack attack)
     {

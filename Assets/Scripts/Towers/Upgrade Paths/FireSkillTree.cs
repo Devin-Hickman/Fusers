@@ -1,118 +1,127 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-class FireSkillTree : SkillTree
+namespace Fusers
 {
-    float splashRadius = 1;
-
-    public float igniteDamage = 2;
-    public float igniteDuration = 5;
-    public bool spreadingFlameActive = false;
-
-    void Start()
+    class FireSkillTree : SkillTree
     {
-        pointsForTierTwoUnlock = 5;
-        pointsForTierThreeUnlock = 2;
+        float splashRadius = 1;
 
-        //Tier One Skills
-        Skill damageBuff = new Skill(0, 5, 1, "Damage Buff");
-        Skill rangeBuff = new Skill(0, 5, 1, "Range Buff");
-        Skill attackSpeedBuff = new Skill(0, 5, 1, "Attack Speed Buff");
+        public float igniteDamage = 2;
+        public float igniteDuration = 5;
+        public bool spreadingFlameActive = false;
 
-        skills.Add(damageBuff.GetName(), damageBuff);
-        skills.Add(rangeBuff.GetName(), rangeBuff);
-        skills.Add(attackSpeedBuff.GetName(), attackSpeedBuff);
-        tierOneSkills.AddRange(new List<Skill> { damageBuff, rangeBuff, attackSpeedBuff } );
-
-        //Tiers Two Skills
-        Skill splashskill = new Skill(0, 2, 2, "Splash Damage");
-        Skill burnSkill = new Skill(0, 2, 2, "Ignition");
-
-        skills.Add(splashskill.GetName(), splashskill);
-        skills.Add(burnSkill.GetName(), burnSkill);
-        tierTwoSkills.AddRange(new List<Skill> { splashskill, burnSkill });
-
-        //Tier Three Skills
-        Skill explosionSkill = new Skill(0, 1, 3, "Spreading Flame");
-        skills.Add(explosionSkill.GetName(), explosionSkill);
-        tierThreeSkills.Add(explosionSkill);
-    }
-
-    /// <summary>
-    /// Returns a pecentage modifier to increase damage
-    /// </summary>
-    /// <returns>
-    /// Returns damager percent modifier 
-    /// </returns>
-
-    private float GetDamageBoostPercentage()
-    {
-        return (float)(skills["Damage Buff"].GetCurrentLevel() * 10);
-    }
-    /// <summary>
-    /// Returns a percentage modifier to increase range
-    /// </summary>
-    /// <returns></returns>
-
-    private float GetRangeBoostPercentage()
-    {
-        return (float)(skills["Range Buff"].GetCurrentLevel() * 5);
-    }
-
-    /// <summary>
-    /// Returns a percentage modifier to increase attack speed
-    /// </summary>
-    /// <returns></returns>
-
-    private float GetAttackSpeedBoostPercentage()
-    {
-        return (float)(skills["Attack Speed Buff"].GetCurrentLevel() * 5);
-    }
-
-    private SplashAttackComponent CreateSplashAttackComponent()
-    {
-
-        float splashAttackDamage = skills["Splash Damage"].GetCurrentLevel() * 50;
-        float splashAttackRadius = skills["Splash Damage"].GetCurrentLevel() * 2;
-        SplashAttackComponent tmpSplashAttack = new SplashAttackComponent(splashAttackDamage, splashAttackRadius);
-
-        if (SkillActive("Ignition"))
+        void Awake()
         {
-            tmpSplashAttack.AddStatusEffect(new Ignite(igniteDamage, igniteDuration));
+            pointsForTierTwoUnlock = 5;
+            pointsForTierThreeUnlock = 2;
+
+            //TODO: Start all skills at 0 instead of max
+
+            //Tier One Skills
+            Skill damageBuff = new Skill(5, 5, 1, "Damage Buff");
+            Skill rangeBuff = new Skill(5, 5, 1, "Range Buff");
+            Skill attackSpeedBuff = new Skill(5, 5, 1, "Attack Speed Buff");
+
+            skills.Add(damageBuff.GetName(), damageBuff);
+            skills.Add(rangeBuff.GetName(), rangeBuff);
+            skills.Add(attackSpeedBuff.GetName(), attackSpeedBuff);
+            tierOneSkills.AddRange(new List<Skill> { damageBuff, rangeBuff, attackSpeedBuff });
+
+            //Tiers Two Skills
+            Skill splashskill = new Skill(2, 2, 2, "Splash Damage");
+            Skill burnSkill = new Skill(2, 2, 2, "Ignition");
+
+            skills.Add(splashskill.GetName(), splashskill);
+            skills.Add(burnSkill.GetName(), burnSkill);
+            tierTwoSkills.AddRange(new List<Skill> { splashskill, burnSkill });
+
+            //Tier Three Skills
+            Skill explosionSkill = new Skill(1, 1, 3, "Spreading Flame");
+            skills.Add(explosionSkill.GetName(), explosionSkill);
+            tierThreeSkills.Add(explosionSkill);
         }
 
-        return tmpSplashAttack;
-    }
+        /// <summary>
+        /// Returns a pecentage modifier to increase damage
+        /// </summary>
+        /// <returns>
+        /// Returns damager percent modifier 
+        /// </returns>
 
-    public override void ApplyTowerModifiers(BaseElementalTower tower)
-    {
-        tower.IncreaseDamageByPercent(GetDamageBoostPercentage());
-        tower.IncreaseAttackSpeed(GetAttackSpeedBoostPercentage());
-        tower.IncreaseRange(GetRangeBoostPercentage());
-    }
-
-    public override IAttack ModifyAttack(IAttack attack)
-    {
-        if(SkillActive("Splash Damage"))
+        public override float GetDamageBoostPercentage()
         {
-            attack.AddAttackComponent(CreateSplashAttackComponent());
+            return (float)(skills["Damage Buff"].GetCurrentLevel() * 10 / (float)100);
+        }
+        /// <summary>
+        /// Returns a percentage modifier to increase range
+        /// </summary>
+        /// <returns></returns>
+
+        public override float GetRangeBoostPercentage()
+        {
+            
+            float s = (float)(skills["Range Buff"].GetCurrentLevel() * 5 / (float)100);
+            return s;
         }
 
-        if (SkillActive("Ignition"))
+        /// <summary>
+        /// Returns a percentage modifier to increase attack speed
+        /// </summary>
+        /// <returns></returns>
+
+        public override float GetAttackSpeedBoostPercentage()
         {
-            attack.AddStatusEffect(new Ignite(igniteDamage, igniteDuration));
+            return (float)(skills["Attack Speed Buff"].GetCurrentLevel() * 5 / (float)100);
         }
 
-      
-        return attack;
+        private void AddSplashAttackComponent(IAttack attack)
+        {
+            SplashAttackComponent tmpSplashAttack = new GameObject().AddComponent<SplashAttackComponent>();
+
+            float splashAttackDamage = skills["Splash Damage"].GetCurrentLevel() * 1;
+            float splashAttackRadius = skills["Splash Damage"].GetCurrentLevel() * 10;
+            tmpSplashAttack.Construct(splashAttackDamage, splashAttackRadius, ElementType.FIRE);
+
+            if (SkillActive("Ignition"))
+            {
+                
+                tmpSplashAttack.AddStatusEffect(new Ignite(igniteDamage, igniteDuration));
+            }
+            attack.AddAttackComponent(tmpSplashAttack);
+            Destroy(tmpSplashAttack.gameObject);
+        }
+
+        public override IAttack ModifyAttack(IAttack attack)
+        {
+            Debug.Log("Modifying Attack with Fire Tower Upgrades");
+            if (SkillActive("Splash Damage"))
+            {
+                Debug.Log("Adding Splash Damange");
+                AddSplashAttackComponent(attack);
+            }
+
+            if (SkillActive("Ignition"))
+            {
+                Debug.Log("Adding Ignitie Status Effect");
+                attack.AddStatusEffect(new Ignite(igniteDamage, igniteDuration));
+            }
+
+
+            return attack;
+        }
+
+        private bool SkillActive(string skillName)
+        {
+            return skills[skillName].GetCurrentLevel() > 0;
+        }
+
+        public override void IncreaseSkillLevel(string skillName, int increment, int tier)
+        {
+            base.IncreaseSkillLevel(skillName, increment, tier);
+        }
+
     }
-
-    private bool SkillActive(string skillName)
-    {
-        return skills[skillName].GetCurrentLevel() > 0;
-    }
-
-
 }
+
+

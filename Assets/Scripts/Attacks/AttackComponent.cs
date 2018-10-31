@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-public class AbstractAttackComponent : MonoBehaviour, IAttackComponent
+public abstract class AbstractAttackComponent : MonoBehaviour, IAttackComponent
 {
     List<IStatusEffect> component_statusEffects;
+
+    public abstract void DoAttack(float x, float y, float z);
 
     List<IStatusEffect> IAttackComponent.GetStatusEffects()
     {

@@ -25,26 +25,25 @@ public abstract class AbstractTower : MonoBehaviour, ITower  {
         enemiesInRangeDetector = this.GetComponentInChildren<ColliderRangeDetector>();
     }
 	// Use this for initialization
-	protected void Start () {
+	protected virtual void Start () {
         attackCooldown = 1 / attacksPerSecond;
 
-        Debug.Log(enemiesInRangeDetector.name);
         //Get the range indicator that is displayed for the tower and set disable it.
         //May need to be changed for different scaling on phones
         enemiesInRangeDetector.transform.localScale = new Vector3(attackRadius * 1.5f, attackRadius * 1.5f, 0);
-        enemiesInRangeDetector.ConstructValues(attackRadius);
+        enemiesInRangeDetector.ConstructValues(attackRadius, "Enemy");
         enemiesInRangeDetector.HideRangeIndicator();
         
 	}
 
 	// Update is called once per frame
-	void Update () {
-        Collider2D[] enemiesInRange = enemiesInRangeDetector.FindEnemiesInAttackRadius();
+	protected void Update () {
+        Collider2D[] enemiesInRange = enemiesInRangeDetector.FindEnemiesInAttackRadius(attackRadius);
         if(enemiesInRange.Length > 0)
         {
             AbstractEnemy enemy = enemiesInRange[0].gameObject.GetComponent<AbstractEnemy>();
             Debug.Log("ENEMY FOUND");
-            DoAttack(enemy);
+            Shoot(enemy);
         }   
 	}
 
@@ -64,7 +63,8 @@ public abstract class AbstractTower : MonoBehaviour, ITower  {
         if (!hasAttacked)
         {
             lastAttackTime = Time.time;
-            enemy.OnAttacked(ConstructAttack());
+            IAttack attack = ConstructAttack();
+            enemy.OnAttacked(attack);
             hasAttacked = true;
         }
         else if(Time.time > lastAttackTime + attackCooldown)

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Fusers;
+using UnityEngine;
 
 //TODO: Interface/Abstract Base Class Stoff
 
@@ -12,7 +10,7 @@ public abstract class AbstractAttack : IAttack
     protected ElementType damageType;
     List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
-    List<AbstractEnemy> invalidTargets = new List<AbstractEnemy>();
+    List<AbstractEnemy> invalidTargets = new List<AbstractEnemy>(); 
     List<IAttackComponent> attackComponents = new List<IAttackComponent>();
 
     public void AddAttackComponent(IAttackComponent component) { attackComponents.Add(component); }
@@ -33,13 +31,15 @@ public abstract class AbstractAttack : IAttack
 
     public void ApplyDamagePercentModifiers(float percent) { damage += damage * percent / 100; }
 
-    public void DoAttackComponents()
+    public void DoAttackComponents(float x, float y, float z)
     {
         foreach(IAttackComponent component in attackComponents)
         {
-            component.DoAttack();
+            component.DoAttack(x,y,z);
+  
         }
     }
+
 
 }
 

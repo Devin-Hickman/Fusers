@@ -43,7 +43,7 @@ public interface IAttack
     /// <summary>
     /// Performs any special additions to the attack, comes from attack components
     /// </summary>
-    void DoAttackComponents();
+    void DoAttackComponents(float x, float y, float z);
 
     /// <summary>
     /// Applies any damage modifiers to the attack's base damage

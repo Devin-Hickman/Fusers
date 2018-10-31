@@ -6,6 +6,6 @@ using System.Text;
 
 public interface IStatusEffect
 {
-    void ApplyStatusEffect(IEnemy enemy);
+    void DoStatusEffect(IEnemy enemy);
 }
 
