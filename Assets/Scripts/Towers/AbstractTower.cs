@@ -8,6 +8,8 @@ public abstract class AbstractTower : MonoBehaviour, ITower, IFocusable
     [SerializeField] protected float attackDamage;
     [SerializeField] protected float attacksPerSecond;
 
+    public GameObject arrow;
+
     //rangeIndicator scale (radius) is dependent on attackRadius * 1.5
     private float lastAttackTime;
 
@@ -82,10 +84,13 @@ public abstract class AbstractTower : MonoBehaviour, ITower, IFocusable
         enemiesInRangeDetector.HideRangeIndicator();
     }
 
-    public virtual void Shoot(IEnemy enemy)
+    public virtual void Shoot(AbstractEnemy enemy)
     {
         if (!hasAttacked)
         {
+            Debug.Log(this.name + "Is shooting");
+            Instantiate(arrow, this.transform.position , this.transform.rotation);
+            arrow.GetComponent<Arrow>().FireProjetile(enemy.GetEnemyPosition(), transform.position);
             lastAttackTime = Time.time;
             IAttack attack = ConstructAttack();
             enemy.OnAttacked(attack);
@@ -93,7 +98,6 @@ public abstract class AbstractTower : MonoBehaviour, ITower, IFocusable
         }
         else if (Time.time > lastAttackTime + attackCooldown)
         {
-            Debug.Log("Attack recharging");
             hasAttacked = false;
         }
     }

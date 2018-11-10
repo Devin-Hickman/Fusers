@@ -91,7 +91,6 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy, IFocusable
 
     public virtual void OnAttacked(IAttack incomingAttack)
     {
-        Debug.Log("Under attack");
         incomingAttack.AddInvalidTarget(this);
         AddStatusEffects(incomingAttack.GetStatusEffects());
 
@@ -138,7 +137,6 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy, IFocusable
 
     private void OnDeath()
     {
-        Debug.Log("ENEMY SLAIN");
         Core itemDropped = itemsDroppedOnDeath();
         onDeathEvent.Invoke(itemDropped);
         Destroy(this.gameObject);
@@ -176,5 +174,10 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy, IFocusable
     public void OffFocus()
     {
         throw new NotImplementedException();
+    }
+
+    public Vector3 GetEnemyPosition()
+    {
+        return this.transform.position;
     }
 }

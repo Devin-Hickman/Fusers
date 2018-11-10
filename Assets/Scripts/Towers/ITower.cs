@@ -4,7 +4,7 @@
     /// Shoots an enemy
     /// </summary>
     /// <param name="enemy"></param>
-    void Shoot(IEnemy enemy);
+    void Shoot(AbstractEnemy enemy);
 
     /// <summary>
     /// Returns the current damage of the tower
