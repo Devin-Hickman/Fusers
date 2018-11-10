@@ -37,8 +37,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4171103531361514}
   - component: {fileID: 212626094505451412}
-  - component: {fileID: 58302045883692056}
   - component: {fileID: 114515301535711892}
+  - component: {fileID: 60249352017648438}
   m_Layer: 0
   m_Name: Elemental Tower
   m_TagString: Untagged
@@ -53,7 +53,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1770265519405324}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.8, y: -5.4, z: 0.01953125}
+  m_LocalPosition: {x: 10.43326, y: -16.304773, z: 0.01953125}
   m_LocalScale: {x: 8, y: 8, z: 1}
   m_Children:
   - {fileID: 4473920378490410}
@@ -73,8 +73,8 @@ Transform:
   m_Father: {fileID: 4171103531361514}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &58302045883692056
-CircleCollider2D:
+--- !u!60 &60249352017648438
+PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -86,8 +86,24 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.08
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.64, y: 0.64}
+    newSize: {x: 0.16, y: 0.16}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.19, y: 0.12}
+      - {x: -0.19, y: -0.11}
+      - {x: -0.14999999, y: -0.12}
+      - {x: 0.15999997, y: -0.119999886}
+      - {x: 0.27541578, y: -0.058488607}
+      - {x: 0.32, y: -0.03}
+      - {x: 0.32, y: 0.12}
 --- !u!114 &114018139808392702
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -100,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   layerToSearch: Enemy
+  searchRadius: 0
 --- !u!114 &114515301535711892
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -117,6 +134,7 @@ MonoBehaviour:
   attackDamageType: 0
   costToPurchase: 0
   costToUpgrade: 0
+  isFireTree: 0
 --- !u!212 &212368675103229354
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -199,7 +217,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300582, guid: 510605649919e8245845768f0cca9289, type: 3}
-  m_Color: {r: 0, g: 0.13911247, b: 0.8584906, a: 1}
+  m_Color: {r: 0.10033243, g: 0.8490566, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

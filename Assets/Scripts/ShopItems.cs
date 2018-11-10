@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Fusers;
+﻿using UnityEngine;
+using Unity;
 
-public class ShopItems : MonoBehaviour {
 
+public class ShopItems : MonoBehaviour
+{
     public ElementAugment[] elementAugmentsForSale;
-
-
 }

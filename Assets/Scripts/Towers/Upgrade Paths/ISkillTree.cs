@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Fusers;
 
 public interface ISkillTree
 {
@@ -19,6 +15,7 @@ public interface ISkillTree
     /// <param name="skillName">Name of skill to reeset points</param>
     /// <returns>Number of skill points refunded after resetting of skill to 0</returns>
     int ResetSkill(String skillName);
+
     /// <summary>
     /// Increases the level of a skill
     /// </summary>
@@ -28,6 +25,7 @@ public interface ISkillTree
     void IncreaseSkillLevel(String skillName, int increment, int tier);
 
     float GetDamageBoostPercentage();
+
     /// <summary>
     /// Returns a percentage modifier to increase range
     /// </summary>
@@ -42,4 +40,3 @@ public interface ISkillTree
 
     float GetAttackSpeedBoostPercentage();
 }
-

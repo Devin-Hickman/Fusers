@@ -1,23 +1,24 @@
-﻿using System;
+﻿using Fusers;
+using System;
 using System.Collections.Generic;
-using Fusers;
 using UnityEngine;
+using Unity;
 
- abstract class SkillTree : MonoBehaviour, ISkillTree
+internal abstract class SkillTree : MonoBehaviour, ISkillTree
 {
     [SerializeField]
-    protected Dictionary<String, Skill> skills = new Dictionary<string, Skill>();
+    protected Dictionary<String, AbstractSkill> skills = new Dictionary<string, AbstractSkill>();
 
-    protected List<Skill> tierOneSkills = new List<Skill>();
-    protected List<Skill> tierTwoSkills = new List<Skill>();
-    protected List<Skill> tierThreeSkills = new List<Skill>();
+    protected List<AbstractSkill> tierOneSkills = new List<AbstractSkill>();
+    protected List<AbstractSkill> tierTwoSkills = new List<AbstractSkill>();
+    protected List<AbstractSkill> tierThreeSkills = new List<AbstractSkill>();
 
     public int pointsForTierTwoUnlock;
     public int pointsForTierThreeUnlock;
     protected bool tierTwoUnlocked = false;
     protected bool tierThreeUnlocked = false;
 
-    Sprite sprite;
+    private Sprite sprite;
 
     public abstract IAttack ModifyAttack(IAttack attack);
 
@@ -29,17 +30,18 @@ using UnityEngine;
             case 1:
                 if (CheckTierTwoUnlock() == false)
                 {
-                    foreach (Skill s in tierTwoSkills)
+                    foreach (AbstractSkill s in tierTwoSkills)
                     {
                         if (s.GetCurrentLevel() > 0)
                             refundPoints = ResetSkill(s.GetName());
                     }
                 }
                 break;
+
             case 2:
                 if (CheckTierThreeUnlock() == false)
                 {
-                    foreach (Skill s in tierThreeSkills)
+                    foreach (AbstractSkill s in tierThreeSkills)
                     {
                         if (s.GetCurrentLevel() > 0)
                         {
@@ -61,6 +63,7 @@ using UnityEngine;
                 if (CheckUnlockedTier(skills[skillName]))
                     tierTwoUnlocked = true;
                 break;
+
             case 2:
                 if (tierTwoUnlocked)
                 {
@@ -69,23 +72,21 @@ using UnityEngine;
                         tierThreeUnlocked = true;
                 }
                 break;
+
             case 3:
                 if (tierThreeUnlocked)
                     skills[skillName].IncreaseCurrentLevel(increment);
                 break;
         }
-
     }
 
-    bool CheckUnlockedTier(Skill s)
-    {
-        return s.CurrentEqualsMaxLevel();
-    }
+    private bool CheckUnlockedTier(AbstractSkill s)
+    { return s.CurrentEqualsMaxLevel(); }
 
     private bool CheckTierTwoUnlock()
     {
         int count = 0;
-        foreach (Skill s in tierOneSkills)
+        foreach (AbstractSkill s in tierOneSkills)
         {
             count += s.GetCurrentLevel();
         }
@@ -95,7 +96,7 @@ using UnityEngine;
     private bool CheckTierThreeUnlock()
     {
         int count = 0;
-        foreach (Skill s in tierTwoSkills)
+        foreach (AbstractSkill s in tierTwoSkills)
         {
             count += s.GetCurrentLevel();
         }
@@ -108,98 +109,15 @@ using UnityEngine;
     }
 
     //TODO: Make Abstract/ move these to normal skill tree
-    public virtual float GetDamageBoostPercentage()
-    {
-        return -100;
-    }
+    public virtual float GetDamageBoostPercentage() { return -100; }
 
     public virtual float GetRangeBoostPercentage()
     {
         return -100;
     }
 
-
     public virtual float GetAttackSpeedBoostPercentage()
     {
         return -100;
     }
 }
-
-/// <summary>
-/// Skills reperesent upgrades to a current tower. This struct tracks the current level of a skill, and the tier it belongs to in the tier tree
-/// The effects of a skill are defined inside the skill tree.
-/// </summary>
-
-struct Skill
-{
-    private string skillName;
-    private int currentLevel;
-    private int maxLevel;
-    private int tier;
-
-    public Skill(int c, int m, int t, string s)
-    {
-        skillName = s;
-        currentLevel = c;
-        maxLevel = m;
-        tier = t;
-    }
-
-    public void ResetCurrentLevelToZero()
-    {
-        currentLevel = 0;
-    }
-
-    public int GetCurrentLevel()
-    {
-        return currentLevel;
-    }
-
-    public int GetTier()
-    {
-        return tier;
-    }
-
-    public bool CurrentEqualsMaxLevel()
-    {
-        return (currentLevel == maxLevel);
-    }
-
-    public int RemoveAllSkillsLevels()
-    {
-        int pointRefund = currentLevel;
-        currentLevel = 0;
-        return pointRefund;
-    }
-
-    public int IncreaseCurrentLevel(int increment)
-    {
-        int extraPoints = 0;
-        if(increment > 0)
-        {
-            if (increment + currentLevel <= maxLevel)
-            {
-                currentLevel += increment;
-            }
-            else
-            {
-                extraPoints = currentLevel - maxLevel + increment;
-                currentLevel = maxLevel;
-               
-            }
-        }
-
-        return extraPoints;
-    }
-
-    public int GetMaxLevel()
-    {
-        return maxLevel;
-    }
-
-    public string GetName()
-    {
-        return skillName;
-    }
-}
-

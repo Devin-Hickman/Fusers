@@ -1,27 +1,27 @@
 ﻿using System.Collections;
-using Fusers;
-using Unity;
 using UnityEngine;
+using Unity;
 
 public class LevelHandler : MonoBehaviour
 {
-    [SerializeField] EnemySpawner spawner;
-    int currentLevel = 0;
+    [SerializeField] private EnemySpawner spawner;
+    private int currentLevel = 0;
 
+    //TODO: Use scriptableObjects for level data. # Enemies, Type of Enemy, delay between spawn. Can use multiple scriptable objects for multiple delays?
     public float timeBetweenLevels = 30f;
+
     private float timeLevelEnded = 0;
     private bool forceLevelStart = false;
     public int numEnemiesOnLevel;
     private bool playerClickedNextLevel = false;
 
-    void Start()
+    private void Start()
     {
-
     }
 
-    void Update()
+    private void Update()
     {
-       if(Time.time > timeLevelEnded + timeLevelEnded)
+        if (Time.time > timeLevelEnded + timeLevelEnded)
         {
             forceLevelStart = true;
         }
@@ -60,7 +60,4 @@ public class LevelHandler : MonoBehaviour
         timeLevelEnded = Time.time;
         yield return new WaitUntil(() => playerClickedNextLevel == true || forceLevelStart == true);
     }
- 
-
 }
-

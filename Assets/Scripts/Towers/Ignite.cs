@@ -1,23 +1,22 @@
-﻿using System;
-using UnityEngine;
-using Fusers;
+﻿using UnityEngine;
+using Unity;
 
 /// <summary>
 /// Ignites an enemy, dealing damage over time for x seconds
 /// </summary>
-public class Ignite :  IStatusEffect
+public class Ignite : IStatusEffect
 {
-    float totalDamage = 0;
-    float duration = 0;
-    float timeLastDamageDealt;
-    float timeBetweenTicks = 0.25f;
+    private float totalDamage = 0;
+    private float duration = 0;
+    private float timeLastDamageDealt;
+    private float timeBetweenTicks = 0.25f;
 
-    float damagePerTick = 0;
-    int numTicks = 10;
+    private float damagePerTick = 0;
+    private int numTicks = 10;
 
-    bool isSpreadingFlame = false;
+    private bool isSpreadingFlame = false;
 
-    public Ignite (float damage, float length)
+    public Ignite(float damage, float length)
     {
         totalDamage = damage;
         duration = length;
@@ -34,12 +33,10 @@ public class Ignite :  IStatusEffect
     //TODO: Fix this garbage. Remove direct association with enemy. Add some status handler + visitor?
     public void DoStatusEffect(IEnemy enemy)
     {
-        if(Time.time > timeLastDamageDealt + timeBetweenTicks)
+        if (Time.time > timeLastDamageDealt + timeBetweenTicks)
         {
             enemy.TakeDamage(damagePerTick);
             timeLastDamageDealt = Time.time;
         }
     }
-
 }
-

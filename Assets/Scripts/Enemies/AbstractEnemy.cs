@@ -1,16 +1,17 @@
-﻿using System.Collections;
+﻿using Fusers;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity;
 using UnityEngine.Events;
-using Fusers;
-using System;
 
-public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
-
+public abstract class AbstractEnemy : MonoBehaviour, IEnemy, IFocusable
+{
     [Serializable]
     public class EnemyDeathEvent : UnityEvent<Core> { };
+
     public EnemyDeathEvent onDeathEvent;
-    
+
     [SerializeField] protected float health;
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected int damage;
@@ -18,22 +19,23 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
     [SerializeField] protected ElementType armorType;
     [SerializeField] protected int armor;
 
-    Core[] cores = new Core[] { new Core(ElementType.AIR), new Core(ElementType.EARTH), new Core(ElementType.FIRE), new Core(ElementType.WATER), new Core(ElementType.NORMAL) };
+    private Core[] cores = new Core[] { new Core(ElementType.AIR), new Core(ElementType.EARTH), new Core(ElementType.FIRE), new Core(ElementType.WATER), new Core(ElementType.NORMAL) };
 
-    Transform[] pathPoints;
-    Transform currentDestinationPoint;
+    private Transform[] pathPoints;
+    private Transform currentDestinationPoint;
     private int currentDestinationPointIndex = 0;
     private Vector3 startPosition;
 
-    Rigidbody2D rb2d;
+    private Rigidbody2D rb2d;
     private Vector3 targetDirection;
 
     private List<IStatusEffect> statusEffects = new List<IStatusEffect>();
     protected List<ElementType> elementalWeaknesses = new List<ElementType>();
     protected List<ElementType> elementalVulnerabilities = new List<ElementType>();
 
-	// Use this for initialization
-	 void Start () {
+    // Use this for initialization
+    private void Start()
+    {
         startPosition = this.transform.position;
         pathPoints = GameObject.Find("Enemy Path").GetComponentsInChildren<Transform>();
         currentDestinationPoint = pathPoints[currentDestinationPointIndex];
@@ -42,19 +44,18 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
 
         onDeathEvent.AddListener(PlayerController.addCorestoInventory);
     }
-	
-	// Update is called once per frame
-	void Update () {
 
+    // Update is called once per frame
+    private void Update()
+    {
         Move();
         DoStatusEffects();
-        
     }
 
     public void TakeDamage(float damage)
     {
         health -= damage;
-        if(health < 0)
+        if (health < 0)
         {
             DoDeath();
         }
@@ -62,7 +63,7 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
 
     private void DoStatusEffects()
     {
-        foreach(IStatusEffect s in statusEffects)
+        foreach (IStatusEffect s in statusEffects)
         {
             s.DoStatusEffect(this);
         }
@@ -72,7 +73,6 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
     {
         statusEffects.AddRange(effects);
     }
-
 
     public void AddStatusEffect(IStatusEffect effect)
     {
@@ -99,7 +99,7 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
 
         incomingAttack.DoAttackComponents(transform.position.x, transform.position.y, transform.position.z);
 
-        if(health < 0)
+        if (health < 0)
         {
             DoDeath();
         }
@@ -118,7 +118,6 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
         return damage;
     }
 
-
     private void ReachedEnd()
     {
         //Deal 1 damage to player
@@ -130,7 +129,6 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
         currentDestinationPointIndex++;
         currentDestinationPoint = pathPoints[currentDestinationPointIndex];
         targetDirection = (currentDestinationPoint.position - transform.position).normalized;
-        
     }
 
     public void DoDeath()
@@ -170,4 +168,13 @@ public abstract class AbstractEnemy : MonoBehaviour, IEnemy {
         }
     }
 
+    public void OnFocus()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OffFocus()
+    {
+        throw new NotImplementedException();
+    }
 }

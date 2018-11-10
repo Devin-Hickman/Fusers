@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Fusers;
+﻿using System.Collections.Generic;
 
 public interface IAttackComponent
 {
@@ -15,4 +13,3 @@ public interface IAttackComponent
     /// </summary>
     void DoAttack(float x, float y, float z);
 }
-

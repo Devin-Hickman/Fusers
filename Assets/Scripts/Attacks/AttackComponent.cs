@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Unity;
 
 public abstract class AbstractAttackComponent : MonoBehaviour, IAttackComponent
 {
-    List<IStatusEffect> component_statusEffects;
+    private List<IStatusEffect> component_statusEffects;
 
     public abstract void DoAttack(float x, float y, float z);
 
@@ -12,4 +13,3 @@ public abstract class AbstractAttackComponent : MonoBehaviour, IAttackComponent
         return component_statusEffects;
     }
 }
-

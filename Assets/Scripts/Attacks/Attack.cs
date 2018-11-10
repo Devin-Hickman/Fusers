@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Fusers;
+﻿using Fusers;
 
 namespace Fusers
 {
@@ -16,13 +12,11 @@ namespace Fusers
     }
 }
 
-public class BaseAttack : AbstractAttack,  IAttack
+public class BaseAttack : AbstractAttack, IAttack
 {
     public BaseAttack(float _damage, ElementType elementType)
     {
         damage = _damage;
         damageType = elementType;
     }
-
 }
-

@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Fusers;
+﻿using Fusers;
 
-public class Core {
-
+public class Core
+{
     private ElementType coreType;
     protected int count;
     public int Count { get { return count; } set { count = value; } }

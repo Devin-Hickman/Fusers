@@ -1,35 +1,28 @@
-﻿using System;
+﻿using Fusers;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Fusers;
 using UnityEngine;
 using Unity;
-
 
 /// <summary>
 /// Represents a basic elemental tower that can be upgraded to a specific element
 /// </summary>
 public class BaseElementalTower : AbstractTower
 {
-
     //TODO: Fix Elemental tower for unity's component system
 
-    int upgradePaths_Count = 0;
-    int upgradePaths_Cap = 2;
+    private int upgradePaths_Count = 0;
+    private int upgradePaths_Cap = 2;
     public bool isFireTree = false;
 
     protected override void Start()
     {
-        FireSkillTree fst = new GameObject().AddComponent<FireSkillTree>();
-        AddUpgradePath(fst);
-        Destroy(fst.gameObject);
         base.Start();
     }
 
     public List<ISkillTree> skillTrees = new List<ISkillTree>();
 
-    public override void AddAugmentation(Augment augment)
+    public override void AddAugmentation(ElementAugment augment)
     {
         throw new NotImplementedException();
     }
@@ -89,4 +82,3 @@ public class BaseElementalTower : AbstractTower
         this.sprite = s;
     }
 }
-

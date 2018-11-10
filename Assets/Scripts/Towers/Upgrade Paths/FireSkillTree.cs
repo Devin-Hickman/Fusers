@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Unity;
 
 namespace Fusers
 {
-    class FireSkillTree : SkillTree
+    internal class FireSkillTree : SkillTree
     {
-        float splashRadius = 1;
+        private float splashRadius = 1;
 
         public float igniteDamage = 2;
         public float igniteDuration = 5;
         public bool spreadingFlameActive = false;
 
-        void Awake()
+        private void Awake()
         {
             pointsForTierTwoUnlock = 5;
             pointsForTierThreeUnlock = 2;
@@ -19,25 +20,25 @@ namespace Fusers
             //TODO: Start all skills at 0 instead of max
 
             //Tier One Skills
-            Skill damageBuff = new Skill(5, 5, 1, "Damage Buff");
-            Skill rangeBuff = new Skill(5, 5, 1, "Range Buff");
-            Skill attackSpeedBuff = new Skill(5, 5, 1, "Attack Speed Buff");
+            AbstractSkill damageBuff = new AbstractSkill(5, 5, 1, "Damage Buff");
+            AbstractSkill rangeBuff = new AbstractSkill(5, 5, 1, "Range Buff");
+            AbstractSkill attackSpeedBuff = new AbstractSkill(5, 5, 1, "Attack Speed Buff");
 
             skills.Add(damageBuff.GetName(), damageBuff);
             skills.Add(rangeBuff.GetName(), rangeBuff);
             skills.Add(attackSpeedBuff.GetName(), attackSpeedBuff);
-            tierOneSkills.AddRange(new List<Skill> { damageBuff, rangeBuff, attackSpeedBuff });
+            tierOneSkills.AddRange(new List<AbstractSkill> { damageBuff, rangeBuff, attackSpeedBuff });
 
             //Tiers Two Skills
-            Skill splashskill = new Skill(2, 2, 2, "Splash Damage");
-            Skill burnSkill = new Skill(2, 2, 2, "Ignition");
+            AbstractSkill splashskill = new AbstractSkill(2, 2, 2, "Splash Damage");
+            AbstractSkill burnSkill = new AbstractSkill(2, 2, 2, "Ignition");
 
             skills.Add(splashskill.GetName(), splashskill);
             skills.Add(burnSkill.GetName(), burnSkill);
-            tierTwoSkills.AddRange(new List<Skill> { splashskill, burnSkill });
+            tierTwoSkills.AddRange(new List<AbstractSkill> { splashskill, burnSkill });
 
             //Tier Three Skills
-            Skill explosionSkill = new Skill(1, 1, 3, "Spreading Flame");
+            AbstractSkill explosionSkill = new AbstractSkill(1, 1, 3, "Spreading Flame");
             skills.Add(explosionSkill.GetName(), explosionSkill);
             tierThreeSkills.Add(explosionSkill);
         }
@@ -46,13 +47,14 @@ namespace Fusers
         /// Returns a pecentage modifier to increase damage
         /// </summary>
         /// <returns>
-        /// Returns damager percent modifier 
+        /// Returns damager percent modifier
         /// </returns>
 
         public override float GetDamageBoostPercentage()
         {
             return (float)(skills["Damage Buff"].GetCurrentLevel() * 10 / (float)100);
         }
+
         /// <summary>
         /// Returns a percentage modifier to increase range
         /// </summary>
@@ -60,7 +62,6 @@ namespace Fusers
 
         public override float GetRangeBoostPercentage()
         {
-            
             float s = (float)(skills["Range Buff"].GetCurrentLevel() * 5 / (float)100);
             return s;
         }
@@ -85,7 +86,6 @@ namespace Fusers
 
             if (SkillActive("Ignition"))
             {
-                
                 tmpSplashAttack.AddStatusEffect(new Ignite(igniteDamage, igniteDuration));
             }
             attack.AddAttackComponent(tmpSplashAttack);
@@ -107,7 +107,6 @@ namespace Fusers
                 attack.AddStatusEffect(new Ignite(igniteDamage, igniteDuration));
             }
 
-
             return attack;
         }
 
@@ -116,12 +115,6 @@ namespace Fusers
             return skills[skillName].GetCurrentLevel() > 0;
         }
 
-        public override void IncreaseSkillLevel(string skillName, int increment, int tier)
-        {
-            base.IncreaseSkillLevel(skillName, increment, tier);
-        }
-
+        //public override void IncreaseSkillLevel(string skillName, int increment, int tier) { base.IncreaseSkillLevel(skillName, increment, tier); }
     }
 }
-
-

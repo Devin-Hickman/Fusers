@@ -1,28 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Fusers;
+﻿using Fusers;
 using UnityEngine;
+using Unity;
 
-public class ArrowTower : AbstractTower {
-
-
+public class ArrowTower : AbstractTower
+{
     [SerializeField]
     private ElementAugment elementalAugment;
 
-    new void Start()
+    private new void Start()
     {
         base.Start();
         attackDamageType = ElementType.NORMAL;
     }
 
-
-    public override void AddAugmentation(Augment augment)
+    public override void AddAugmentation(ElementAugment augment)
     {
-        if(augment is ElementAugment)
+        if (augment is ElementAugment)
         {
             elementalAugment = (ElementAugment)augment;
             attackDamageType = elementalAugment.elementType;
-            Debug.Log("Added "  + elementalAugment.elementType + " augment to the tower");
+            Debug.Log("Added " + elementalAugment.elementType + " augment to the tower");
         }
     }
 
@@ -41,7 +38,7 @@ public class ArrowTower : AbstractTower {
         return new BaseAttack(attackDamage, attackDamageType);
     }
 
-    void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(transform.position, attackRadius);

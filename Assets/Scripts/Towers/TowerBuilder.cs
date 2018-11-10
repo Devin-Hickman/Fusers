@@ -1,53 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Fusers;
+﻿using UnityEngine;
 
-public class TowerBuilder : MonoBehaviour {
-
+public class TowerBuilder : MonoBehaviour
+{
     private bool buildMode;
-    public bool BuildMode { get { return buildMode; } }
 
-    static GameObject ghostTower = null;
+    private static GameObject ghostTower = null;
+    private static GameObject createdTower = null;
     private string towerResourceName;
 
-
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    private void Update()
+    {
         if (buildMode)
         {
             //Get mouse position, and have tower follow mouse position
             // Vector3 newPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             // newPos.z = 0;
-            ghostTower.transform.position = InputManager.GetInputPosition();
-            ghostTower.GetComponent<AbstractTower>().ShowRangeIndicator();
+            createdTower.transform.position = InputManager.GetInputPosition();
+            createdTower.GetComponent<AbstractTower>().ShowRangeIndicator();
 
             if (Input.GetMouseButtonDown(0))
             {
-                buildMode = false;
-                //TODO:Cast ray from position to determine if tower is being built on an invalid location
+                if (CheckEligibleTowerPlacement(createdTower))
+                {
+                    PlaceTower();
+                }
+            }
 
-                GameObject realTower = Instantiate(Resources.Load(towerResourceName)) as GameObject;
-                realTower.transform.position = ghostTower.transform.position;
-
-                Destroy(ghostTower);
-
+            if (Input.GetMouseButtonDown(1))
+            {
+                Destroy(createdTower);
             }
         }
-	}
+    }
 
-
-    private GameObject InstantiateGhostTower(string towerFileName)
+    private void PlaceTower()
     {
-        //TODO: Ghost towers shouldn't be able to attack enemies lol
-        GameObject tmpTower = Instantiate(Resources.Load(towerFileName)) as GameObject;
-        tmpTower.transform.localScale = new Vector3(4, 4, 1);
-
-        return tmpTower;
+        GameObject finalTower = Instantiate(createdTower);
+        finalTower.name = "Elemental Tower";
+        buildMode = false;
+        finalTower.GetComponent<AbstractTower>().DisableGhostMode();
+        Destroy(createdTower);
+        //Cleanup. Remove unneeded gameobjects
+        //Destroy(realTower);
+        // Destroy(ghostTower);
     }
 
     private void OutputCannotBuyTower()
@@ -55,24 +51,34 @@ public class TowerBuilder : MonoBehaviour {
         Debug.Log("Not enough cores to buy new tower");
     }
 
-    public void AttemptBuildTower(string towerSpriteFileName)
+    /// <summary>
+    /// UI Facing function. When the user clicks on the button check if they have enough money to purchase the tower, then
+    /// create a ghost version of the tower they intend to purchase. Update handles the movement of the ghost tower and its placement
+    /// </summary>
+    /// <param name="towerToBuy"></param>
+    public void ClickedOnBuyTower(GameObject towerToBuy)
     {
-        Debug.Log("Building tower");
-        towerResourceName = towerSpriteFileName;
-        if (playerData.GetNormalCoresCount() >= 0)
+        if (towerToBuy.GetComponent<AbstractTower>().Purchase(PlayerData.GetNormalCoresCount()))
         {
+            createdTower = Instantiate(towerToBuy);
+            createdTower.name = "Ghost Tower";
+            createdTower.GetComponent<AbstractTower>().EnableGhostMode();
             buildMode = true;
-            ghostTower = InstantiateGhostTower(towerSpriteFileName);
         }
         else
         {
             OutputCannotBuyTower();
         }
+    }
 
-        
-        // towerToBuild = Resoures.Load<Sprite>("Sprite/towerSpriteFileName");
-        //Create a holographic model of the tower, that follows the player's mouse/finger
-
-        //On second click create a real model of the tower in the player's mouse/finger position, snap to a grid
+    /// <summary>
+    /// Checks if the tower can be placed in a valid location, not over any invalid locations in the map.
+    ///
+    /// </summary>
+    private bool CheckEligibleTowerPlacement(GameObject tower)
+    {
+        Collider2D[] overlappedColliders = new Collider2D[0];
+        Physics2D.OverlapCollider(tower.GetComponent<Collider2D>(), new ContactFilter2D(), overlappedColliders);
+        return overlappedColliders.Length == 0;
     }
 }

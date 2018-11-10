@@ -1,8 +1,5 @@
-﻿using System;
+﻿using Fusers;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Fusers;
 
 /// <summary>
 /// Interface for a basic attack
@@ -28,7 +25,7 @@ public interface IAttack
     void SetDamageType(ElementType value);
 
     /// <summary>
-    /// Adds an invalid target to the attack, preventing attacks from hitting the 
+    /// Adds an invalid target to the attack, preventing attacks from hitting the
     /// wrong targets
     /// </summary>
     /// <param name="enemy"></param>
@@ -68,7 +65,4 @@ public interface IAttack
     /// </summary>
     /// <returns></returns>
     List<IStatusEffect> GetStatusEffects();
-
-
 }
-

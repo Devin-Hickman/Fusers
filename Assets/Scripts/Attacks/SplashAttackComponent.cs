@@ -1,20 +1,18 @@
-﻿
+﻿using Fusers;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity;
-using Fusers;
-
 
 public class SplashAttackComponent : AbstractAttackComponent, IAttackComponent
 {
     private float splashDamage;
     private float splashRadius = 0;
-    ElementType splashDamageType;
+    private ElementType splashDamageType;
     private GameObject splashAttackObject;
-    ColliderRangeDetector detector;
-    List<IStatusEffect> statusEffects = new List<IStatusEffect>();
+    private ColliderRangeDetector detector;
+    private List<IStatusEffect> statusEffects = new List<IStatusEffect>();
 
-    void Awake()
+    private void Awake()
     {
         splashAttackObject = (GameObject)Instantiate(Resources.Load("Splash Attack Component"));
         detector = splashAttackObject.GetComponent<ColliderRangeDetector>();
@@ -38,7 +36,7 @@ public class SplashAttackComponent : AbstractAttackComponent, IAttackComponent
         statusEffects.Add(s);
     }
 
-    public void AddStatusEffects(List <IStatusEffect> s)
+    public void AddStatusEffects(List<IStatusEffect> s)
     {
         statusEffects.AddRange(s);
     }
@@ -62,12 +60,9 @@ public class SplashAttackComponent : AbstractAttackComponent, IAttackComponent
 
 public class SplitterAttack : AbstractAttack, IAttack
 {
-
     public SplitterAttack(float d, ElementType dt)
     {
         damage = d;
         damageType = dt;
     }
-
 }
-

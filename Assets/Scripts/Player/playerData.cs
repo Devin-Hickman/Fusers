@@ -1,15 +1,16 @@
-﻿using System.Collections;
+﻿using Fusers;
 using System.Collections.Generic;
 using UnityEngine;
-using Fusers;
-using System;
+using Unity;
 
-public class playerData {
+public class PlayerData : ScriptableObject
+{
     private static readonly int maxCores = 999999;
-   // private List<Core> playerCores = new List<Core>();
+
+    // private List<Core> playerCores = new List<Core>();
     private static Dictionary<ElementType, int> playerCores = new Dictionary<ElementType, int>();
 
-    public playerData()
+    public PlayerData()
     {
         playerCores.Add(ElementType.AIR, 0);      //0
         playerCores.Add(ElementType.EARTH, 0);    //1
@@ -43,16 +44,17 @@ public class playerData {
         return playerCores[ElementType.NORMAL];
     }
 
-    public static  void AddCores(Core core)
+    public static void AddCores(Core core)
     {
         ElementType eleType = core.CoreType;
         //Incrases the count of the core in the player list. Cannot be below 0 or exceed maxCoreCount
         if (playerCores.ContainsKey(eleType))
         {
-            if(playerCores[eleType] + core.Count > maxCores)
+            if (playerCores[eleType] + core.Count > maxCores)
             {
                 playerCores[eleType] = maxCores;
-            } else if (playerCores[eleType] + core.Count < 0)
+            }
+            else if (playerCores[eleType] + core.Count < 0)
             {
                 playerCores[eleType] = 0;
             }
@@ -60,7 +62,6 @@ public class playerData {
             {
                 playerCores[eleType] += core.Count;
             }
-
         }
         //Adds the core to list, should not occur
         else

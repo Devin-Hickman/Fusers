@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Fusers;
+﻿using UnityEngine;
+using Unity;
 
-public abstract class Augment : ScriptableObject {
-
-
+public abstract class Augment : MonoBehaviour
+{
 }
